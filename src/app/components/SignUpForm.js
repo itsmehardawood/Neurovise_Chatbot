@@ -2,12 +2,13 @@
 import { Poppins } from 'next/font/google';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 const PoppinsFont = Poppins({
   subsets: ['latin'],
   weight: "400",
   variable: "--font-poppins"
-})
+});
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
@@ -15,6 +16,8 @@ export default function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState(''); // New state for success message
+
+  const router = useRouter(); // Initialize the router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +44,9 @@ export default function SignUpForm() {
         setEmail(''); // Clear the email field
         setPassword(''); // Clear the password field
         setConfirmPassword(''); // Clear the confirm password field
+
+        // Redirect to the business service page after successful signup
+        router.push('/business-service'); // Redirect to business-service page
       } else {
         setError(data.detail);
         setSuccessMessage(''); // Clear success message if there's an error

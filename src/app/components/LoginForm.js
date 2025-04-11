@@ -17,35 +17,43 @@ function LoginForm() {
       setError("Email and password are required");
       return;
     }
-
+  
     try {
+      // Build form-encoded body
+      const formBody = new URLSearchParams();
+      formBody.append("username", email);      // note: "username" not "email"
+      formBody.append("password", password);
+  
       const response = await fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify({ email, password })
+        body: formBody.toString(),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        console.log("Success:", data);
+        // 2. Store token for later API calls
+        localStorage.setItem("access_token", data.access_token);
+  
         setSuccessMessage("Welcome back! You have logged in successfully.");
-        setError(''); // Clear any previous error message
-        // Optional: Redirect after displaying success message
+        setError("");
+  
         setTimeout(() => {
           router.push('/business-service');
-        }, 2000); // Redirect after 2 seconds
+        }, 2000);
       } else {
-        setError(data.detail);
-        setSuccessMessage(''); // Clear success message if there's an error
+        setError(data.detail || "Login failed");
+        setSuccessMessage("");
       }
     } catch (err) {
       setError("Login failed. Please try again.");
-      setSuccessMessage(''); // Clear success message if there's an error
+      setSuccessMessage("");
     }
   };
+  
 
   return (
     <div className={`pt-20 flex justify-center items-center h-full w-full text-black`}>
