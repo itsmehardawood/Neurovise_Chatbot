@@ -1,5 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import LogoutButton from "./components/LogoutButton";
+import LanguageSwitchButton from "./components/LanguageSwitchButton";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,6 +25,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <LogoutButton/>
+                  <LanguageSwitchButton />
+
         {children}
       </body>
     </html>

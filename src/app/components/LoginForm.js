@@ -1,81 +1,84 @@
-'use client'; // Ensures the component is rendered on the client side
+'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/translations';
 
-function LoginForm() {
+function LoginForm({ locale = 'he' }) {
+  const t = useTranslation(locale);
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // State for success message
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("Email and password are required");
+      setError([t('error.requiredFields')]);
       return;
     }
-  
+
     try {
-      // Build form-encoded body
       const formBody = new URLSearchParams();
-      formBody.append("username", email);      // note: "username" not "email"
-      formBody.append("password", password);
-  
-      const response = await fetch("http://localhost:8000/login", {
-        method: "POST",
+      formBody.append('username', email); // ✅ use 'username' for FastAPI OAuth2
+      formBody.append('password', password);
+      formBody.append('grant_type', 'password'); // ✅ optional, but standard
+
+      const response = await fetch('https://93d8-103-225-221-165.ngrok-free.app/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formBody.toString(),
       });
-  
+
       const data = await response.json();
-  
+      console.log(data);
+
       if (response.ok) {
-        // 2. Store token for later API calls
-        localStorage.setItem("access_token", data.access_token);
-  
-        setSuccessMessage("Welcome back! You have logged in successfully.");
-        setError("");
-  
+        localStorage.setItem('access_token', data.access_token);
+
+        setSuccessMessage(t('Successful log in Welcome Back'));
+        setError(null);
+
         setTimeout(() => {
-          router.push('/business-service');
+          router.push(`/${locale}`);
         }, 2000);
       } else {
-        setError(data.detail || "Login failed");
-        setSuccessMessage("");
+        if (Array.isArray(data.detail)) {
+          const messages = data.detail.map((err) => err.msg);
+          setError(messages);
+        } else {
+          setError([data.detail || t('error.loginFailed')]);
+        }
+        setSuccessMessage('');
       }
     } catch (err) {
-      setError("Login failed. Please try again.");
-      setSuccessMessage("");
+      setError([t('error.generic')]);
+      setSuccessMessage('');
     }
   };
-  
 
   return (
-    <div className={`pt-20 flex justify-center items-center h-full w-full text-black`}>
+    <div className={`pt-20 flex justify-center items-center h-full w-full text-black ${locale === 'he' ? 'rtl' : 'ltr'}`}>
       <div className="bg-white p-8 rounded-lg w-full max-w-md">
-        <h1 className={`text-gray-900 text-2xl py-10 font-bold`}>Log in</h1>
+        <h1 className="text-gray-900 text-2xl py-10 font-bold">{t('login')}</h1>
 
-        {/* Show success message if login is successful */}
-        {successMessage && (
-          <p className="text-green-500 text-sm mb-4">{successMessage}</p>
-        )}
-
-        {/* Show error message if any error occurs */}
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {successMessage && <p className="text-green-500 text-sm mb-4">{successMessage}</p>}
+        {error && error.map((msg, index) => (
+          <p key={index} className="text-red-500 text-sm mb-2">{msg}</p>
+        ))}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">{t('email')}</label>
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="Enter your Email"
+              placeholder={t('emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -84,12 +87,12 @@ function LoginForm() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">{t('password')}</label>
             <input
               type="password"
               id="password"
               name="password"
-              placeholder="Enter your Password"
+              placeholder={t('passwordPlaceholder')}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -101,13 +104,15 @@ function LoginForm() {
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           >
-            Log In
+            {t('loginButton')}
           </button>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-blue-500 hover:text-blue-700">Sign up</Link>
+          {t('noAccount')}{' '}
+          <Link href={`/${locale}/signup`} className="text-blue-500 hover:text-blue-700">
+            {t('signup')}
+          </Link>
         </p>
       </div>
     </div>
