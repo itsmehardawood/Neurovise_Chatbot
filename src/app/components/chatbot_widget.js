@@ -40,7 +40,7 @@ export default function ChatbotWidget({ locale }) {
     setLoading(true);
 
     try {
-      const res = await fetch('https://93d8-103-225-221-165.ngrok-free.app/chat', {
+      const res = await fetch('https://ecochatbot-production.up.railway.app/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,16 +70,13 @@ export default function ChatbotWidget({ locale }) {
 
   // Helper function to format chatbot response
   const formatChatbotResponse = (response) => {
-    // Assuming the backend sends service details in a readable format, for example:
-    // "Service: Web Design\nPrice: $100\nDescription: High-quality web design service."
-    // You can split and format it accordingly.
     return response.split("\n").map((line, index) => (
       <p key={index} className="whitespace-pre-line">{line}</p>
     ));
   };
 
   return (
-    <div className="flex flex-col h-[600px] max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl overflow-hidden">
+    <div className="flex flex-col h-[600px] max-w-full w-full sm:max-w-xl mx-auto mt-10 bg-white shadow-md rounded-2xl overflow-hidden">
       <div className="p-4 bg-blue-600 text-white">
         <h1 className="text-xl font-bold">{t('chatbotTitle')}</h1>
       </div>

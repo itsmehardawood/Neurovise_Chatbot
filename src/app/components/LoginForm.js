@@ -26,7 +26,7 @@ function LoginForm({ locale = 'he' }) {
       formBody.append('password', password);
       formBody.append('grant_type', 'password'); // ✅ optional, but standard
 
-      const response = await fetch('https://93d8-103-225-221-165.ngrok-free.app/login', {
+      const response = await fetch('https://ecochatbot-production.up.railway.app/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

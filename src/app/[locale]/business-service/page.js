@@ -99,7 +99,7 @@ const ServiceManagement = () => {
     try {
       const token = localStorage.getItem("access_token");
       console.log("token printing:", token);
-      const response = await fetch("https://93d8-103-225-221-165.ngrok-free.app/business-service", {
+      const response = await fetch("https://ecochatbot-production.up.railway.app/business-service", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

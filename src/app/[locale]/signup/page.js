@@ -8,8 +8,8 @@ const PoppinsFont = Poppins({
   variable: '--font-poppins',
 });
 
-// async because we need to get locale from params
-export default async function SignUpPage({ params }) {
+// params is already available synchronously, so no need for async
+export default function SignUpPage({ params }) {
   const locale = params.locale;
 
   return (
@@ -21,4 +21,3 @@ export default async function SignUpPage({ params }) {
     </div>
   );
 }
-

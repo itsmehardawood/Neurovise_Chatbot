@@ -30,7 +30,7 @@ export default function SignUpForm({ locale }) {
     }
 
     try {
-      const response = await fetch('https://93d8-103-225-221-165.ngrok-free.app/signup', {
+      const response = await fetch('https://ecochatbot-production.up.railway.app/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
