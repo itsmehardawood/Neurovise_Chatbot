@@ -19,7 +19,7 @@ export default function Page() {
   return (
     <div className={`${PoppinsFont.variable} w-full min-h-screen grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2`}>
       {/* Left Section */}
-      <div className="bg-slate-900 w-full bg-gradient-to-bl from-blue-900 via-transparent to-blue-900 rtl:bg-gradient-to-br">
+      <div className="bg-slate-900 w-full text-white bg-gradient-to-bl from-blue-900 via-transparent to-blue-900 rtl:bg-gradient-to-br">
         <div className="px-5 flex justify-between items-start">
           <Image src="/images/logo.png" height="180" width="180" alt="this is our logo" priority />
           <div className='p-5'>
