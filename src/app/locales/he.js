@@ -19,7 +19,7 @@ const he = {
   acService: 'שירות מזגנים, שירות רכב',
   flatFee: 'מחיר קבוע',
   serviceNeed: 'אני צריך שירות למזגן פנימי/חיצוני',
-  priceValue: '₪0.00',
+  priceValue: '0.00',
   yes: 'כן',
   friendly: 'ידידותי, רשמי',
   day: 'יום',
@@ -50,6 +50,8 @@ const he = {
   loginButton: 'התחבר',
   emailPlaceholderLogin: 'הזן את האימייל שלך להתחברות',
   passwordPlaceholderLogin: 'הזן את הסיסמה שלך להתחברות',
+  logout: "התנתקות",
+
 
   // New translations for ServiceManagement component
   serviceManagement: 'ניהול שירותים',
@@ -65,18 +67,31 @@ const he = {
   chatCommunicationStyle: 'סגנון תקשורת בצ\'אט',
   saving: 'שומר...',
   settingsSavedSuccessfully: 'ההגדרות נשמרו בהצלחה!',
+  fillRequiredFields : "אנא מלא את כל השדות הנדרשים.",
+
+  
+
+
 
   error: {
     requiredFields: 'אנא מלא את כל השדות הנדרשים.',
     loginFailed: 'ההתחברות נכשלה. אנא בדוק את פרטי הכניסה שלך.',
     generic: 'אירעה שגיאה. אנא נסה שוב מאוחר יותר.',
-    saveFailed: 'השמירה נכשלה. אנא נסה שוב.'
+    fillRequiredFields : "אנא מלא את כל השדות הנדרשים.",
+
+
   },
-  success: {
-    welcomeBack: 'ברוך שובך! התחברת בהצלחה.',
-    settingsSaved: 'ההגדרות נשמרו בהצלחה!',
-    successMessage: 'התחברת בהצלחה'
-  },
+
+
+
+
+success: {
+  welcomeBack: 'ברוך שובך! התחברת בהצלחה.',
+  settingsSaved: 'ההגדרות נשמרו בהצלחה!',
+  successMessage: 'התחברת בהצלחה',
+  saveFailed: 'השמירה נכשלה. אנא נסה שוב.',
+},
+
 
   // Chatbot Widget translations
   chatbotTitle: "עוזר צ'אטבוט",
@@ -106,7 +121,7 @@ const he = {
     placeholder: 'שאל אותי כל דבר...',
     welcome: 'איך אני יכול לעזור לך היום?'
   },
-
+done: "סיום",
   // Homepage additions
   loading: 'טוען...',
   welcome: 'ברוך הבא',

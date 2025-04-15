@@ -1,9 +1,8 @@
-// components/LanguageSwitchButton.js
 'use client';
 
-import { usePathname, useRouter, useParams } from 'next/navigation';
+import { useRouter, usePathname, useParams } from 'next/navigation';
 
-const LanguageSwitchButton = () => {
+const LanguageButton = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { locale } = useParams();
@@ -17,14 +16,19 @@ const LanguageSwitchButton = () => {
     router.push(newPath);
   };
 
+  const labels = {
+    en: 'עברית',
+    he: 'English',
+  };
+
   return (
     <button
       onClick={switchLanguage}
-      className="fixed top-4 right-4 z-50 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+      className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
     >
-      {locale === 'he' ? 'English' : 'עברית'}
+      {labels[locale] || 'Switch'}
     </button>
   );
 };
 
-export default LanguageSwitchButton;
+export default LanguageButton;

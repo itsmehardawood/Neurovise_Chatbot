@@ -19,7 +19,7 @@ const en = {
   acService: 'AC Service, Car Service',
   flatFee: 'Flat Fee',
   serviceNeed: 'I need a service for AC indoor outdoor',
-  priceValue: '$0.00',
+  priceValue: '0.00',
   yes: 'Yes',
   friendly: 'Friendly, Formal',
   day: 'Day',
@@ -50,6 +50,7 @@ const en = {
   loginButton: 'Log In',
   emailPlaceholderLogin: 'Enter your email to login',
   passwordPlaceholderLogin: 'Enter your password to login',
+  logout: "Logout",
 
   // New translations for ServiceManagement component
   serviceManagement: 'Service Management',
@@ -65,17 +66,30 @@ const en = {
   chatCommunicationStyle: 'Chat Communication Style',
   saving: 'Saving...',
   settingsSavedSuccessfully: 'Settings saved successfully!',
+  fillRequiredFields : "Please fill in all required fields.",
+
+
+
+
+
 
   error: {
     requiredFields: 'Please fill in all fields.',
     loginFailed: 'Login failed. Please check your credentials.',
     generic: 'An error occurred. Please try again later.',
-    saveFailed: 'Failed to save. Please try again.'
+    saveFailed: 'Failed to save. Please try again.',
+    fillRequiredFields : "Please fill in all required fields.",
+
+
   },
+
+
   success: {
     welcomeBack: 'Welcome back! You have successfully logged in.',
     settingsSaved: 'Settings saved successfully!',
-    successMessage: 'Successfully Logged in'
+    successMessage: 'Successfully Logged in',
+    serviceAdded: 'Service added successfully.' , 
+
   },
 
   // Chatbot Widget additions
@@ -107,6 +121,8 @@ const en = {
     placeholder: 'Ask me anything...',
     welcome: 'How can I help you today?'
   },
+
+  done:"Done",
 
   // Homepage additions
   loading: 'Loading...',
