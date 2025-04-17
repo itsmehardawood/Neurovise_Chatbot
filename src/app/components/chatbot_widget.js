@@ -143,7 +143,7 @@ const [showPreChatForm, setShowPreChatForm] = useState(true);
         </div>
 
         {showPreChatForm ? (
-          <form onSubmit={handleStartChat} className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50">
+          <form onSubmit={handleStartChat} className="flex-1 p-4 space-y-4  overflow-y-auto bg-gray-50">
             <h2 className="text-lg font-semibold text-center">{t('startChat')}</h2>
             <input
               type="text"

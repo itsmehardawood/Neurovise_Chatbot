@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RiChatHistoryFill } from "react-icons/ri";
+import { IoIosChatboxes } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 
 const ChatHistory = () => {
@@ -88,9 +88,9 @@ const ChatHistory = () => {
                 <td className="py-3 px-4 border-b">
                   <button
                     onClick={() => openModal(session)}
-                    className="hover:text-blue-900 text-black text-xl px-4 py-2 rounded"
+                    className="hover:text-blue-700 text-blue-900 text-3xl px-4 py-2 rounded"
                   >
-                    <RiChatHistoryFill />
+                  <IoIosChatboxes />
                   </button>
                 </td>
               </tr>

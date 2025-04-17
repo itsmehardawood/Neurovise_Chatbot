@@ -280,12 +280,12 @@ export default function ServicesAdminPage() {
                               fetchServiceDetails(service.id);
                             }}
                           >
-                            <IoEyeSharp className="text-xl text-blue-950" />
+                            <IoEyeSharp className="text-xl text-blue-950 hover:text-blue-600" />
                           </button>
 
                           {/* delete */}
                           <button onClick={() => handleDelete(service.id)}>
-                            <RiDeleteBinLine className="text-xl text-red-500" />
+                            <RiDeleteBinLine className="text-xl text-red-500 hover:text-red-700" />
                           </button>
 
                           {/* edit */}
@@ -294,7 +294,7 @@ export default function ServicesAdminPage() {
                               fetchServiceDetails(service.id, true)
                             }
                           >
-                            <FaEdit className="text-xl text-green-800" />
+                            <FaEdit className="text-xl text-blue-500 hover:text-blue-700" />
                           </button>
                           {service.isActive ? (
                             <button
@@ -303,7 +303,7 @@ export default function ServicesAdminPage() {
                               }
                               title="Deactivate service"
                             >
-                              <BsToggle2On className="text-2xl text-green-950" />
+                              <BsToggle2On className="text-3xl text-green-600" />
                             </button>
                           ) : (
                             <button
@@ -312,7 +312,7 @@ export default function ServicesAdminPage() {
                               }
                               title="Activate service"
                             >
-                              <BsToggle2Off className="text-2xl text-gray-400" />
+                              <BsToggle2Off className="text-3xl text-gray-400" />
                             </button>
                           )}
                         </div>
@@ -604,6 +604,8 @@ export default function ServicesAdminPage() {
             </div>
           </div>
         </div>
+
+        
       )}
     </div>
   );
