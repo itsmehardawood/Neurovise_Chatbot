@@ -128,7 +128,20 @@ const en = {
   loading: 'Loading...',
   welcome: 'Welcome',
   goToChatbot: 'Go to Chatbot',
-  manageBusiness: 'Manage Business Services'
+  manageBusiness: 'Add Business Services',
+  AdminPanel: "Admin Panel",
+
+
+  
+    startChat: "Start Chat",
+    fullName: "Full Name",
+    email: "Email",
+    phoneNumber: "Phone Number",
+    start: "Start"
+  
+  
+
+
 };
 
 export default en;

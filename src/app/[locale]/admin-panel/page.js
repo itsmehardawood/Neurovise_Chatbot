@@ -6,6 +6,8 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import { BsToggle2Off } from "react-icons/bs";
 import { BsToggle2On } from "react-icons/bs";
+import ChatHistory from "@/app/components/chathistory";
+import BackButton from "@/app/components/BackButton";
 
 export default function ServicesAdminPage() {
   const [services, setServices] = useState([]);
@@ -108,6 +110,10 @@ export default function ServicesAdminPage() {
         }
       );
 
+      if (response.ok) {
+        alert("Changes Updated Successfully");
+      }
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || "Failed to update service");
@@ -162,13 +168,11 @@ export default function ServicesAdminPage() {
     }
   };
 
-
-
   const toggleServiceStatus = async (serviceId, currentStatus) => {
     try {
       const token = localStorage.getItem("access_token");
       const newStatus = !currentStatus;
-      
+
       const response = await fetch(
         `http://localhost:8000/service/${serviceId}`,
         {
@@ -180,26 +184,47 @@ export default function ServicesAdminPage() {
           body: JSON.stringify({ isActive: newStatus }),
         }
       );
-  
+
+      if (response.ok) {
+        alert("Are you really want to change Active Status. If yes Press OK.");
+      }
+
       if (!response.ok) {
         throw new Error("Failed to update service status");
       }
-  
+
       // Update local state
-      setServices(services.map(service => 
-        service.id === serviceId ? { ...service, isActive: newStatus } : service
-      ));
-  
+      setServices(
+        services.map((service) =>
+          service.id === serviceId
+            ? { ...service, isActive: newStatus }
+            : service
+        )
+      );
     } catch (error) {
       console.error("Error toggling service status:", error);
       alert("Error updating service status: " + error.message);
     }
   };
 
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let min = 0; min < 60; min += 30) {
+        const formatted = `${String(hour).padStart(2, "0")}:${String(
+          min
+        ).padStart(2, "0")}`;
+        times.push(formatted);
+      }
+    }
+    return times;
+  };
+
   return (
-    <div className="p-6 space-y-12 text-black min-h-screen bg-gradient-to-br from-slate-800 to-slate-900">
+    <div className="p-8 space-y-12 text-black min-h-screen bg-gradient-to-br from-slate-800 to-slate-900">
+      <BackButton/>
       {/* SERVICES TABLE */}
-      <section>
+      <section className="py-5">
         <h1 className="text-3xl font-bold mb-6 text-white">Services</h1>
 
         <div className="overflow-x-auto border border-gray-200 shadow-md rounded-lg bg-white">
@@ -310,29 +335,8 @@ export default function ServicesAdminPage() {
       {/* CHAT HISTORY TABLE (static for now) */}
       <section>
         <h2 className="text-3xl font-bold mb-6 text-white">Chat History</h2>
+            <ChatHistory/>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="text-left py-3 px-4 border-b">User</th>
-                <th className="text-left py-3 px-4 border-b">Date & Time</th>
-                <th className="text-left py-3 px-4 border-b">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="py-3 px-4 border-b">john@example.com</td>
-                <td className="py-3 px-4 border-b">2025-04-16 10:45 AM</td>
-                <td className="py-3 px-4 border-b">
-                  <button className="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-2 rounded">
-                    View Chat
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </section>
 
       {/* MODAL FOR FULL DESCRIPTION */}
@@ -371,7 +375,7 @@ export default function ServicesAdminPage() {
                     <div>
                       <label className="block font-medium">Price</label>
                       <input
-                        type="number"
+                        type="text"
                         className="border p-2 rounded w-full"
                         value={editForm.price}
                         onChange={(e) =>
@@ -396,10 +400,9 @@ export default function ServicesAdminPage() {
                       />
                     </div>
 
-                    {/* Editable Working Hours */}
                     <div>
                       <h3 className="font-medium text-gray-900 mb-2">
-                        Working Hours
+                        Working hours{" "}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {Object.entries(editForm.working_hours || {}).map(
@@ -429,15 +432,14 @@ export default function ServicesAdminPage() {
                                       }))
                                     }
                                   />
-                                  <span>
-                                    {hours.active ? "Open" : "Closed"}
-                                  </span>
+                                  <span>{hours.active ? "open" : "close"}</span>
                                 </label>
                               </div>
+
                               {hours.active && (
                                 <div className="flex justify-between text-sm text-gray-600 space-x-2">
-                                  <input
-                                    type="time"
+                                  {/* Start Time */}
+                                  <select
                                     value={hours.start}
                                     onChange={(e) =>
                                       setEditForm((prev) => ({
@@ -452,10 +454,18 @@ export default function ServicesAdminPage() {
                                       }))
                                     }
                                     className="border p-1 rounded w-full"
-                                  />
+                                  >
+                                    {generateTimeOptions().map((time) => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </select>
+
                                   <span className="self-center">to</span>
-                                  <input
-                                    type="time"
+
+                                  {/* End Time */}
+                                  <select
                                     value={hours.end}
                                     onChange={(e) =>
                                       setEditForm((prev) => ({
@@ -470,7 +480,13 @@ export default function ServicesAdminPage() {
                                       }))
                                     }
                                     className="border p-1 rounded w-full"
-                                  />
+                                  >
+                                    {generateTimeOptions().map((time) => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </div>
                               )}
                             </div>

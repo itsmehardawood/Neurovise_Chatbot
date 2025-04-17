@@ -45,15 +45,20 @@ export default function HomePage() {
 
         {/* Floating button to toggle the chat widget */}
         <div
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer z-50"
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer z-50"
         >
           <span className="text-2xl">💬</span>
         </div>
 
         {/* Conditionally render the chatbot widget */}
-        {isChatOpen && <ChatbotWidget locale={locale} />}
-
+{isChatOpen && (
+  <ChatbotWidget 
+    locale={locale} 
+    isOpen={isChatOpen} 
+    onClose={() => setIsChatOpen(false)}
+  />
+)}
         <h1 className="text-4xl font-bold mb-6 drop-shadow">{t('welcome')}</h1>
 
         <div className="flex flex-col gap-4 w-full max-w-xs">
@@ -63,7 +68,7 @@ export default function HomePage() {
             onClick={() => router.push(`/${locale}/admin-panel`)}
             className="w-full px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
           >
-            {t('Admin Panel')}
+            {t('AdminPanel')}
           </button>
 
 

@@ -3,13 +3,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from '@/lib/translations';
 
-export default function ChatbotWidget({ locale }) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function ChatbotWidget({ locale, isOpen, onClose }) {
   const [userId, setUserId] = useState('');
   const [sessionId, setSessionId] = useState('');  // New state for session ID
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [fullName, setFullName] = useState('');
+const [email, setEmail] = useState('');
+const [phoneNumber, setPhoneNumber] = useState('');
+const [showPreChatForm, setShowPreChatForm] = useState(true);
+
   const messagesEndRef = useRef(null);
 
   const t = useTranslation(locale);
@@ -53,7 +57,7 @@ export default function ChatbotWidget({ locale }) {
     setLoading(true);
 
     try {
-      const res = await fetch('https://ecochatbot-production.up.railway.app/chat', {
+      const res = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,28 +91,93 @@ export default function ChatbotWidget({ locale }) {
     ));
   };
 
-  const generateSessionId = () => {
-    // Implement your session ID generation logic, could be a UUID or MongoDB ObjectId
-    return 'session_' + new Date().getTime();  // Example: Using current timestamp as session ID
+
+
+  const handleStartChat = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const res = await fetch('http://localhost:8000/start-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: fullName,
+          email,
+          phone_number: phoneNumber,
+        }),
+      });
+  
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Failed to start chat session');
+  
+      setSessionId(data.session_id);
+      localStorage.setItem('session_id', data.session_id);
+      setShowPreChatForm(false);
+    } catch (err) {
+      alert(err.message);
+    }
   };
+  
+
+
+
+
+
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {isOpen && (
-        <div className="relative mb-2 mr-4">
-          <div className="flex flex-col h-[500px] max-w-full w-full sm:max-w-xl bg-white shadow-md rounded-2xl overflow-hidden">
-            <div className="p-4 bg-blue-600 text-white relative">
-              <h1 className="text-xl font-bold">{t('chatbotTitle')}</h1>
-              
-              {/* Close button */}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="absolute top-2 right-2 text-white text-2xl"
-              >
-                ✖
-              </button>
-            </div>
 
+    <div className="fixed bottom-4 right-4 z-50 text-black">
+  {isOpen && (
+    <div className="relative mb-2 mr-4">
+      <div className="flex flex-col h-[500px] max-w-full w-full sm:max-w-xl bg-white shadow-md rounded-2xl overflow-hidden">
+        <div className="p-4 bg-blue-600 text-white relative">
+          <h1 className="text-xl font-bold">{t('chatbotTitle')}</h1>
+
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-white text-2xl"
+          >
+            ✖
+          </button>
+        </div>
+
+        {showPreChatForm ? (
+          <form onSubmit={handleStartChat} className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50">
+            <h2 className="text-lg font-semibold text-center">{t('startChat')}</h2>
+            <input
+              type="text"
+              placeholder={t('fullName')}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded-xl"
+            />
+            <input
+              type="email"
+              placeholder={t('email')}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded-xl"
+            />
+            <input
+              type="tel"
+              placeholder={t('phoneNumber')}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              required
+              className="w-full p-2 border border-gray-300 rounded-xl"
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl w-full"
+            >
+              {t('start')}
+            </button>
+          </form>
+        ) : (
+          <>
             <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
               <div className="space-y-4">
                 {messages.length === 0 && (
@@ -118,16 +187,18 @@ export default function ChatbotWidget({ locale }) {
                 )}
 
                 {messages.map((msg, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div 
-                      className={`max-w-[80%] p-3 rounded-lg ${msg.sender === 'user' 
-                        ? 'bg-blue-500 text-white rounded-br-none' 
-                        : msg.isError 
-                          ? 'bg-red-100 text-red-800 rounded-bl-none' 
-                          : 'bg-gray-200 text-gray-800 rounded-bl-none'}`}
+                    <div
+                      className={`max-w-[80%] p-3 rounded-lg ${
+                        msg.sender === 'user'
+                          ? 'bg-blue-500 text-white rounded-br-none'
+                          : msg.isError
+                          ? 'bg-red-100 text-red-800 rounded-bl-none'
+                          : 'bg-gray-200 text-gray-800 rounded-bl-none'
+                      }`}
                     >
                       {msg.text}
                     </div>
@@ -169,19 +240,27 @@ export default function ChatbotWidget({ locale }) {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-      
-      {/* Only one floating button to open the chatbot */}
-      {!isOpen && (
-        <div
-          onClick={() => setIsOpen(true)}
-          className="bg-blue-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors"
-        >
-          <span className="text-2xl">💬</span>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
+  )}
+
+  {/* Floating Button */}
+  {!isOpen && (
+    <div
+  onClick={() => {
+  setIsOpen(!isOpen);
+  console.log('isOpen:', !isOpen); // Check if the state toggles as expected
+}}
+  className="bg-blue-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors"
+>
+  <span className="text-2xl">💬</span>
+</div>
+  )}
+</div>
+
+
+
   );
 }

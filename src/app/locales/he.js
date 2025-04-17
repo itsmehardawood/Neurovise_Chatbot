@@ -126,7 +126,17 @@ done: "סיום",
   loading: 'טוען...',
   welcome: 'ברוך הבא',
   goToChatbot: 'עבור לצ\'אטבוט',
-  manageBusiness: 'נהל שירותי עסק'
+  manageBusiness: 'הוסף שירותי עסק',
+  AdminPanel: "לוח ניהול",
+
+
+  startChat: 'התחל צ\'אט',
+  fullName: 'שם מלא',
+  email: 'אימייל',
+  phoneNumber: 'מספר טלפון', 
+  start: 'התחל'
+
+
 };
 
 export default he;
