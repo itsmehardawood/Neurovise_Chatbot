@@ -24,11 +24,12 @@ const LanguageButton = () => {
   return (
     <button
       onClick={switchLanguage}
-      className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+      className="fixed top-4 right-4 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition z-50"
     >
       {labels[locale] || 'Switch'}
     </button>
   );
+  
 };
 
 export default LanguageButton;

@@ -6,6 +6,7 @@ import { useTranslation } from '@/lib/translations';
 export default function ChatbotWidget({ locale }) {
   const [isOpen, setIsOpen] = useState(false);
   const [userId, setUserId] = useState('');
+  const [sessionId, setSessionId] = useState('');  // New state for session ID
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,19 @@ export default function ChatbotWidget({ locale }) {
       } catch (err) {
         console.error('Error decoding token:', err);
       }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Check if session ID exists in localStorage, if not, create a new session
+    const storedSessionId = localStorage.getItem('session_id');
+    if (storedSessionId) {
+      setSessionId(storedSessionId);
+    } else {
+      // Create a new session ID (could be UUID or MongoDB ObjectId) for new sessions
+      const newSessionId = generateSessionId();  // Implement this function if needed
+      setSessionId(newSessionId);
+      localStorage.setItem('session_id', newSessionId);
     }
   }, []);
 
@@ -48,6 +62,7 @@ export default function ChatbotWidget({ locale }) {
         body: JSON.stringify({
           user_id: userId,
           query: message,
+          session_id: sessionId,  // Include session ID in the request
         }),
       });
 
@@ -70,6 +85,11 @@ export default function ChatbotWidget({ locale }) {
     return response.split("\n").map((line, index) => (
       <p key={index} className="whitespace-pre-line">{line}</p>
     ));
+  };
+
+  const generateSessionId = () => {
+    // Implement your session ID generation logic, could be a UUID or MongoDB ObjectId
+    return 'session_' + new Date().getTime();  // Example: Using current timestamp as session ID
   };
 
   return (

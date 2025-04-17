@@ -16,11 +16,12 @@ const LogoutButton = () => {
   return (
     <button
       onClick={handleLogout}
-      className="px-4 py-2 mx-2 rounded bg-red-500 text-white hover:bg-red-600 transition"
+      className="fixed top-4 right-27 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition z-50"
     >
       {t('logout')}
     </button>
   );
+  
 };
 
 export default LogoutButton;

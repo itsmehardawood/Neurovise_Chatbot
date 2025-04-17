@@ -57,7 +57,15 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold mb-6 drop-shadow">{t('welcome')}</h1>
 
         <div className="flex flex-col gap-4 w-full max-w-xs">
- 
+
+
+        <button
+            onClick={() => router.push(`/${locale}/admin-panel`)}
+            className="w-full px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
+          >
+            {t('Admin Panel')}
+          </button>
+
 
           <button
             onClick={() => router.push(`/${locale}/business-service`)}

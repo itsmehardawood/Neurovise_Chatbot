@@ -135,7 +135,7 @@ const ServiceManagement = () => {
 
   return (
     <>
-      <div className="fixed top-4 right-25 z-50">
+      <div className=" top-4 right-25 z-50">
         <LogoutButton />
       </div>
 
@@ -215,11 +215,11 @@ const ServiceManagement = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
-                  maxLength={100}
+                  maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  {description.length}/100 {t("characters")}
+                  {description.length}/500 {t("characters")}
                 </p>
               </div>
 
@@ -241,7 +241,7 @@ const ServiceManagement = () => {
                       onChange={(e) => setPrice(e.target.value)}
                       required
                       min="0"
-                      step="0.01"
+                      // step="0.01"
                       className="w-full pl-8 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
