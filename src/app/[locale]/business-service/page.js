@@ -1,6 +1,6 @@
 "use client";
 import { Poppins } from "next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslation } from "@/lib/translations";
 import Image from "next/image";
@@ -15,11 +15,19 @@ const PoppinsFont = Poppins({
 });
 
 const ServiceManagement = () => {
+
+
+
+
+ 
+  
+
   const router = useRouter();
   const { locale } = useParams();
   const t = useTranslation(locale || "he");
 
   // Service Management State
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [services, setServices] = useState([]);
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
@@ -133,7 +141,20 @@ const ServiceManagement = () => {
     router.push(`/${locale}`);
   };
 
-  return (
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      router.push(`/${locale}/login`);
+    } else {
+      setIsAuthChecked(true);
+    }
+  }, []);
+  
+  if (isAuthChecked){
+
+   return (
+
     <>
       <div className=" top-4 right-25 z-50">
         <LogoutButton />
@@ -440,5 +461,6 @@ const ServiceManagement = () => {
     </>
   );
 };
+}
 
 export default ServiceManagement;

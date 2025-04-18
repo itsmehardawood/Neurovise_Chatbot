@@ -40,7 +40,7 @@ function LoginForm({ locale = 'he' }) {
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
 
-        setSuccessMessage(t('Successful log in Welcome Back'));
+        setSuccessMessage(t('SuccessfulLogin'));
         setError(null);
 
         setTimeout(() => {
@@ -51,7 +51,7 @@ function LoginForm({ locale = 'he' }) {
           const messages = data.detail.map((err) => err.msg);
           setError(messages);
         } else {
-          setError([data.detail || t('error.loginFailed')]);
+          setError([t('loginFailed')]);
         }
         setSuccessMessage('');
       }

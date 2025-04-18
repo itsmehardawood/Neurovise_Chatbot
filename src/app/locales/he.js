@@ -1,4 +1,6 @@
 const he = {
+  SuccessfulLogin: "ברוך הבא, התחברת בהצלחה",
+  loginFailed: "ההתחברות נכשלה. אנא בדוק את פרטי הכניסה שלך.",
   email: 'אימייל',
   password: 'סיסמה',
   confirmPassword: 'אימות סיסמה',
@@ -75,7 +77,6 @@ const he = {
 
   error: {
     requiredFields: 'אנא מלא את כל השדות הנדרשים.',
-    loginFailed: 'ההתחברות נכשלה. אנא בדוק את פרטי הכניסה שלך.',
     generic: 'אירעה שגיאה. אנא נסה שוב מאוחר יותר.',
     fillRequiredFields : "אנא מלא את כל השדות הנדרשים.",
 

@@ -1,4 +1,6 @@
 const en = {
+  SuccessfulLogin:"Welcome, Successfully Logged in",
+  loginFailed: 'Login failed. Please check your credentials.',
   email: 'Email',
   password: 'Password',
   confirmPassword: 'Confirm Password',
@@ -75,10 +77,10 @@ const en = {
 
   error: {
     requiredFields: 'Please fill in all fields.',
-    loginFailed: 'Login failed. Please check your credentials.',
     generic: 'An error occurred. Please try again later.',
     saveFailed: 'Failed to save. Please try again.',
     fillRequiredFields : "Please fill in all required fields.",
+
 
 
   },
@@ -137,7 +139,8 @@ const en = {
     fullName: "Full Name",
     email: "Email",
     phoneNumber: "Phone Number",
-    start: "Start"
+    start: "Start",
+
   
   
 

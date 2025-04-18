@@ -8,8 +8,10 @@ import { BsToggle2Off } from "react-icons/bs";
 import { BsToggle2On } from "react-icons/bs";
 import ChatHistory from "@/app/components/chathistory";
 import BackButton from "@/app/components/BackButton";
+import { useRouter, useParams } from "next/navigation";
 
 export default function ServicesAdminPage() {
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [services, setServices] = useState([]);
   const [chatTone, setChatTone] = useState("");
   const [selectedDescription, setSelectedDescription] = useState("");
@@ -24,6 +26,23 @@ export default function ServicesAdminPage() {
     working_hours: {},
   });
 
+  const router = useRouter(); // <-- Add this
+  const { locale } = useParams(); // <
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      router.push(`/${locale}/login`);
+    } else {
+      setIsAuthChecked(true);
+    }
+  }, []);
+
+
+
+
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -37,7 +56,7 @@ export default function ServicesAdminPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch services");
+          router.push(`/${locale}/login`);
         }
 
         const data = await response.json();
@@ -220,9 +239,18 @@ export default function ServicesAdminPage() {
     return times;
   };
 
-  return (
+
+ 
+
+  if (!isAuthChecked) {  
+    return null }
+
+
+return (
     <div className="p-8 space-y-12 text-black min-h-screen bg-gradient-to-br from-slate-800 to-slate-900">
       <BackButton/>
+      <h1 className="text-4xl underline w-full mx-auto flex justify-center font-bold text-amber-50 py-5 ">Admin Panel</h1>
+
       {/* SERVICES TABLE */}
       <section className="py-5">
         <h1 className="text-3xl font-bold mb-6 text-white">Services</h1>
@@ -231,7 +259,7 @@ export default function ServicesAdminPage() {
           {/* Single table structure with scrollable body */}
           <div className="overflow-y-auto max-h-[40vh]">
             <table className="min-w-full table-fixed">
-              <thead className="bg-gray-100 sticky top-0">
+              <thead className="bg-gray-200 sticky top-0">
                 <tr>
                   <th className="w-1/5 text-left py-3 px-4 border-b">
                     Service
@@ -341,7 +369,7 @@ export default function ServicesAdminPage() {
 
       {/* MODAL FOR FULL DESCRIPTION */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50  z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/70  z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg max-w-xl w-full max-h-[80vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">
               {isEditMode
@@ -375,7 +403,7 @@ export default function ServicesAdminPage() {
                     <div>
                       <label className="block font-medium">Price</label>
                       <input
-                        type="text"
+                        type="number"
                         className="border p-2 rounded w-full"
                         value={editForm.price}
                         onChange={(e) =>
@@ -507,8 +535,8 @@ export default function ServicesAdminPage() {
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-900">Price</h3>
-                      <p className="text-gray-700">${selectedService.price}</p>
-                    </div>
+                      <p>${Number(selectedService.price).toFixed(2)}</p>
+                      </div>
                     <div>
                       <h3 className="font-medium text-gray-900">Description</h3>
                       <p className="text-gray-700">
@@ -609,4 +637,5 @@ export default function ServicesAdminPage() {
       )}
     </div>
   );
+
 }
