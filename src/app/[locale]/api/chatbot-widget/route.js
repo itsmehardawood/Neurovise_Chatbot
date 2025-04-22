@@ -1,16 +1,29 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get("userId") || "unknown";
+  const locale = searchParams.get("locale") || "en";
 
-export async function GET() {
-  const filePath = path.join(process.cwd(), 'public', 'chatbot-widget.js');
-  const jsFile = fs.readFileSync(filePath, 'utf8');
+  const embedUrl = `http://localhost:3000/${locale}/chatbot-embed?userId=${userId}`;
 
-  return new NextResponse(jsFile, {
-    status: 200,
+  const jsCode = `
+    console.log("✅ Injecting chatbot for userId: ${userId}");
+
+    const iframe = document.createElement('iframe');
+    iframe.src = "${embedUrl}";
+    iframe.style.position = 'fixed';
+    iframe.style.bottom = '20px';
+    iframe.style.right = '20px';
+    iframe.style.width = '400px';
+    iframe.style.height = '530px';
+    iframe.style.border = 'none';
+    iframe.style.zIndex = 9999;
+    
+    document.body.appendChild(iframe);
+  `;
+
+  return new Response(jsCode, {
     headers: {
-      'Content-Type': 'application/javascript',
-      'Cache-Control': 'no-store',
+      "Content-Type": "application/javascript; charset=utf-8",
     },
   });
 }
