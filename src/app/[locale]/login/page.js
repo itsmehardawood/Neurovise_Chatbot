@@ -5,6 +5,7 @@ import LoginForm from '@/app/components/LoginForm'
 import Image from 'next/image'
 import { useTranslation } from '@/lib/translations'
 import { useParams } from 'next/navigation'
+import LanguageButton from '@/app/components/LanguageButton'
 
 const PoppinsFont = Poppins({
   subsets: ['latin'],
@@ -18,6 +19,8 @@ export default function Page() {
 
   return (
     <div className={`${PoppinsFont.variable} w-full min-h-screen grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2`}>
+                   <LanguageButton />
+
       {/* Left Section */}
       <div className="bg-slate-900 w-full text-white bg-gradient-to-bl from-blue-900 via-transparent to-blue-900 rtl:bg-gradient-to-br">
         <div className="px-5 flex justify-between items-start">

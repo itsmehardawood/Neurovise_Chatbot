@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import LanguageButton from "./components/LanguageButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +22,6 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-transparent  m-0 p-0` }>
         {/* Overlay Language Button */}
         <div className="fixed top-4 right-4 z-50 ">
-          <LanguageButton />
         </div>
 
         {/* Main Page Content */}

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import BackButton from "@/app/components/BackButton";
 import LogoutButton from "@/app/components/LogoutButton";
+import LanguageButton from "@/app/components/LanguageButton";
 
 const PoppinsFont = Poppins({
   subsets: ["latin"],
@@ -158,6 +159,8 @@ const ServiceManagement = () => {
     <>
       <div className=" top-4 right-25 z-50">
         <LogoutButton />
+        <LanguageButton />
+
       </div>
 
       <div

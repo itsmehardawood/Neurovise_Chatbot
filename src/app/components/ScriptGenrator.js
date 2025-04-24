@@ -23,7 +23,7 @@ export default function ScriptGenerator() {
   }, []);
 
   const generateScript = () => {
-    const script = `<script src="http://localhost:3000/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
+    const script = `<script src="https://ecochatbot-production.up.railway.app/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
     setScriptTag(script);
   };
 

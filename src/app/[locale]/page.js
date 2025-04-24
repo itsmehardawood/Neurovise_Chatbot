@@ -8,6 +8,7 @@ import LogoutButton from "../components/LogoutButton";
 import ChatbotWidget from "../components/chatbot_widget";
 import WhatsAppButton from "../components/Whatspp";
 import ScriptGenerator from "../components/ScriptGenrator";
+import LanguageButton from "../components/LanguageButton";
 
 export default function HomePage() {
   const router = useRouter();
@@ -71,6 +72,8 @@ export default function HomePage() {
       {/* 🔒 Floating logout button */}
       <div className="fixed top-4 right-25 z-50">
         <LogoutButton />
+        <LanguageButton />
+
       </div>
 
       {/* 📄 Main content */}

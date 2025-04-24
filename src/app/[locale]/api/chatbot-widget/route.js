@@ -3,7 +3,7 @@ export async function GET(request) {
   const userId = searchParams.get("userId") || "unknown";
   const locale = searchParams.get("locale") || "en";
 
-  const embedUrl = `http://localhost:3000/${locale}/chatbot-embed?userId=${userId}`;
+  const embedUrl = `https://ecochatbot-production.up.railway.app/${locale}/chatbot-embed?userId=${userId}`;
 
   const jsCode = `
     console.log("✅ Injecting chatbot for userId: ${userId}");

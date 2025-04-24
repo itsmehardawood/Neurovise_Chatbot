@@ -26,7 +26,7 @@ const ChatHistory = () => {
 
     const fetchChatSessions = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/chat-sessions/${userId}`);
+        const res = await fetch(`https://ecochatbot-production.up.railway.app/chat-sessions/${userId}`);
         const data = await res.json();
         setChatSessions(data.chat_sessions || []);
       } catch (err) {

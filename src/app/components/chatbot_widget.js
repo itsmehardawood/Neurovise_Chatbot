@@ -46,7 +46,7 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/chat", {
+      const res = await fetch("https://ecochatbot-production.up.railway.app/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8000/start-chat", {
+      const res = await fetch("https://ecochatbot-production.up.railway.app/start-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

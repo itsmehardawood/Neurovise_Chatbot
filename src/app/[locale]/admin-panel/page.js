@@ -48,7 +48,7 @@ export default function ServicesAdminPage() {
       try {
         const token = localStorage.getItem("access_token");
 
-        const response = await fetch("http://localhost:8000/business-service", {
+        const response = await fetch("https://ecochatbot-production.up.railway.app/business-service", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://localhost:8000/service/${serviceId}`,
+        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://localhost:8000/service/${selectedService.id}`,
+        `https://ecochatbot-production.up.railway.app/service/${selectedService.id}`,
         {
           method: "PUT",
           headers: {
@@ -157,7 +157,7 @@ export default function ServicesAdminPage() {
 
   const deleteService = async (serviceId) => {
     try {
-      const res = await fetch(`http://localhost:8000/service/${serviceId}`, {
+      const res = await fetch(`https://ecochatbot-production.up.railway.app/service/${serviceId}`, {
         method: "DELETE",
       });
 
@@ -193,7 +193,7 @@ export default function ServicesAdminPage() {
       const newStatus = !currentStatus;
 
       const response = await fetch(
-        `http://localhost:8000/service/${serviceId}`,
+        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
         {
           method: "PUT",
           headers: {
