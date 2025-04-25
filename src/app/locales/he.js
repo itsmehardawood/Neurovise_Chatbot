@@ -1,4 +1,6 @@
 const he = {
+  GenerateScriptTag: "קבל קישור לצ'אטבוט",
+  phoneNumberPlaceholder: "הכנס את מספר הטלפון שלך",
   SuccessfulLogin: "ברוך הבא, התחברת בהצלחה",
   loginFailed: "ההתחברות נכשלה. אנא בדוק את פרטי הכניסה שלך.",
   email: 'אימייל',

@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useTranslation } from '@/lib/translations';
 
-export default function ScriptGenerator() {
+export default function ScriptGenerator({ locale }) {
   const [userId, setUserId] = useState("");
   const [scriptTag, setScriptTag] = useState("");
 
-  const params = useParams();
-  const locale = params?.locale || "en"; // fallback if locale not found
+  const t = useTranslation(locale);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -28,13 +27,13 @@ export default function ScriptGenerator() {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <button
         onClick={generateScript}
-        className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+        className="bg-blue-600 text-white px-20 py-3 rounded-xl"
       >
-        Generate Chatbot Script
-      </button>
+            {t('GenerateScriptTag')}  
+                </button>
 
       {scriptTag && (
         <div className="mt-4">

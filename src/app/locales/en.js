@@ -1,4 +1,5 @@
 const en = {
+  phoneNumberPlaceholder:"Enter your Phone Number",
   SuccessfulLogin:"Welcome, Successfully Logged in",
   loginFailed: 'Login failed. Please check your credentials.',
   email: 'Email',
@@ -20,6 +21,7 @@ const en = {
   chatStyle: 'Chat Style',
   acService: 'AC Service, Car Service',
   flatFee: 'Flat Fee',
+  GenerateScriptTag: "Get Chatbot Link",
   serviceNeed: 'I need a service for AC indoor outdoor',
   priceValue: '0.00',
   yes: 'Yes',

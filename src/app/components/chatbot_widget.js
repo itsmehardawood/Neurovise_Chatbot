@@ -60,6 +60,8 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
           session_id: sessionId, // Include session ID in the request
         }),
       });
+      console.log('API Response:', res);
+
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || t("chatError"));
@@ -98,6 +100,8 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
           full_name: fullName,
           email,
           phone_number: phoneNumber,
+          user_id: userId, // ✅ ADD THIS
+
         }),
       });
 

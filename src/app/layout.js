@@ -21,8 +21,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-transparent  m-0 p-0` }>
         {/* Overlay Language Button */}
-        <div className="fixed top-4 right-4 z-50 ">
-        </div>
+      
 
         {/* Main Page Content */}
         {children}

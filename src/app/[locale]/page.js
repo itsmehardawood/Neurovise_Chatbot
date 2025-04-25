@@ -9,6 +9,7 @@ import ChatbotWidget from "../components/chatbot_widget";
 import WhatsAppButton from "../components/Whatspp";
 import ScriptGenerator from "../components/ScriptGenrator";
 import LanguageButton from "../components/LanguageButton";
+import Navbar from "../components/Navbar";
 
 export default function HomePage() {
   const router = useRouter();
@@ -45,30 +46,13 @@ export default function HomePage() {
     return JSON.parse(jsonPayload); // Return the decoded payload as an object
   };
 
-  const generateScriptTag = async () => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      alert("User is not logged in.");
-      return;
-    }
-
-    // Decode the JWT to get user_id
-    const decodedToken = decodeJWT(token);
-    const userId = decodedToken.user_id;
-
-    if (!userId) {
-      alert("User ID not found in the token.");
-      return;
-    }
-
-   
-  };
+ 
 
   if (loading) return <p>{t("loading")}</p>;
 
   return (
     <>
+    {/* <Navbar/> */}
       {/* 🔒 Floating logout button */}
       <div className="fixed top-4 right-25 z-50">
         <LogoutButton />
@@ -78,13 +62,13 @@ export default function HomePage() {
 
       {/* 📄 Main content */}
       <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col justify-center items-center gap-6 p-6 relative">
-        <Image
+        {/* <Image
           src="/images/logo.png"
           height={300}
           width={300}
           alt="this is our logo"
           priority
-        />
+        /> */}
 
         {/* Floating button to toggle the chat widget */}
         <div
@@ -111,20 +95,20 @@ export default function HomePage() {
         <div className="flex flex-col gap-4 w-full max-w-xs justify-center items-center">
           <button
             onClick={() => router.push(`/${locale}/admin-panel`)}
-            className="w-full px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
+            className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
           >
             {t("AdminPanel")}
           </button>
 
           <button
             onClick={() => router.push(`/${locale}/business-service`)}
-            className="w-full px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
+            className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
           >
             {t("manageBusiness")}
           </button>
 
           {/* Button to generate script tag */}
-                    <ScriptGenerator userId={userId} />
+                    <ScriptGenerator userId={userId} locale={locale}  />
                     
 
        

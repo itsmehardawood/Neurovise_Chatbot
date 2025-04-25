@@ -4,7 +4,7 @@ import { Poppins } from 'next/font/google';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTranslation } from '@/lib/translations'; 
+import { useTranslation } from '@/lib/translations';
 
 const PoppinsFont = Poppins({
   subsets: ['latin'],
@@ -16,6 +16,7 @@ export default function SignUpForm({ locale }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');  // New state for phone number
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -35,7 +36,7 @@ export default function SignUpForm({ locale }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, phone: phoneNumber  }), // Send phone number
       });
 
       const data = await response.json();
@@ -46,6 +47,7 @@ export default function SignUpForm({ locale }) {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        setPhoneNumber('');  // Reset phone number
         setTimeout(() => {
           router.push(`/${locale}/login`);
         }, 1500); // 👈 1.5s delay before redirect
@@ -84,6 +86,22 @@ export default function SignUpForm({ locale }) {
               placeholder={t('emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+              {t('phoneNumber')}  {/* Add label for phone number */}
+            </label>
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder={t('phoneNumberPlaceholder')}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />

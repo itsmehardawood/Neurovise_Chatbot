@@ -25,10 +25,14 @@ export default function ServicesAdminPage() {
     description: "",
     working_hours: {},
   });
+  const [confirmationModal, setConfirmationModal] = useState({
+    isOpen: false,
+    action: null, // 'delete', 'toggle', 'edit'
+    payload: null,
+  });
 
   const router = useRouter(); // <-- Add this
   const { locale } = useParams(); // <
-
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -39,21 +43,20 @@ export default function ServicesAdminPage() {
     }
   }, []);
 
-
-
-
-
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const token = localStorage.getItem("access_token");
 
-        const response = await fetch("https://ecochatbot-production.up.railway.app/business-service", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://ecochatbot-production.up.railway.app/business-service",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           router.push(`/${locale}/login`);
@@ -114,6 +117,19 @@ export default function ServicesAdminPage() {
 
   // edit handler
 
+  const handleSaveClick = () => {
+    setConfirmationModal({
+      isOpen: true,
+      action: "save",
+      payload: null,
+      title: "Confirm Changes",
+      message: "Are you sure you want to save these changes?",
+      icon: <FaEdit className="text-blue-500 text-4xl mb-4" />,
+      confirmText: "Save Changes",
+      confirmColor: "bg-blue-600 hover:bg-blue-700",
+    });
+  };
+
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem("access_token");
@@ -128,10 +144,6 @@ export default function ServicesAdminPage() {
           body: JSON.stringify(editForm),
         }
       );
-
-      if (response.ok) {
-        alert("Changes Updated Successfully");
-      }
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -157,9 +169,12 @@ export default function ServicesAdminPage() {
 
   const deleteService = async (serviceId) => {
     try {
-      const res = await fetch(`https://ecochatbot-production.up.railway.app/service/${serviceId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -174,17 +189,17 @@ export default function ServicesAdminPage() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this service?")) {
-      try {
-        await deleteService(id);
-        setServices((prevList) =>
-          prevList.filter((service) => String(service.id) !== String(id))
-        );
-      } catch (error) {
-        alert("Error deleting service: " + error.message);
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let min = 0; min < 60; min += 30) {
+        const formatted = `${String(hour).padStart(2, "0")}:${String(
+          min
+        ).padStart(2, "0")}`;
+        times.push(formatted);
       }
     }
+    return times;
   };
 
   const toggleServiceStatus = async (serviceId, currentStatus) => {
@@ -204,52 +219,115 @@ export default function ServicesAdminPage() {
         }
       );
 
-      if (response.ok) {
-        alert("Are you really want to change Active Status. If yes Press OK.");
-      }
-
       if (!response.ok) {
         throw new Error("Failed to update service status");
       }
 
-      // Update local state
-      setServices(
-        services.map((service) =>
-          service.id === serviceId
-            ? { ...service, isActive: newStatus }
-            : service
-        )
-      );
+      return await response.json();
     } catch (error) {
       console.error("Error toggling service status:", error);
-      alert("Error updating service status: " + error.message);
+      throw error; // Re-throw to handle in the calling function
     }
   };
 
-  const generateTimeOptions = () => {
-    const times = [];
-    for (let hour = 0; hour < 24; hour++) {
-      for (let min = 0; min < 60; min += 30) {
-        const formatted = `${String(hour).padStart(2, "0")}:${String(
-          min
-        ).padStart(2, "0")}`;
-        times.push(formatted);
+  const handleDeleteClick = (id) => {
+    const service = services.find((s) => s.id === id);
+    setConfirmationModal({
+      isOpen: true,
+      action: "delete",
+      payload: id,
+      title: "Confirm Deletion",
+      message: `Are you sure you want to delete "${service?.serviceName}"? This action cannot be undone.`,
+      icon: <RiDeleteBinLine className="text-red-500 text-4xl mb-4" />,
+      confirmText: "Delete",
+      confirmColor: "bg-red-600 hover:bg-red-700",
+    });
+  };
+
+  const handleToggleClick = (service) => {
+    const newStatus = !service.isActive;
+    setConfirmationModal({
+      isOpen: true,
+      action: "toggle",
+      payload: {
+        id: service.id,
+        currentStatus: service.isActive,
+      },
+      title: newStatus ? "Activate Service" : "Deactivate Service",
+      message: `Are you sure you want to ${
+        newStatus ? "activate" : "deactivate"
+      } "${service.serviceName}"?`,
+      icon: newStatus ? (
+        <BsToggle2On className="text-green-500 text-4xl mb-4" />
+      ) : (
+        <BsToggle2Off className="text-gray-500 text-4xl mb-4" />
+      ),
+      confirmText: newStatus ? "Activate" : "Deactivate",
+      confirmColor: newStatus
+        ? "bg-green-600 hover:bg-green-700"
+        : "bg-gray-600 hover:bg-gray-700",
+    });
+  };
+
+  const handleEditClick = (id) => {
+    const service = services.find((s) => s.id === id);
+    setConfirmationModal({
+      isOpen: true,
+      action: "edit",
+      payload: id,
+      title: "Edit Service",
+      message: `You are about to edit "${service?.serviceName}". Proceed?`,
+      icon: <FaEdit className="text-blue-500 text-4xl mb-4" />,
+      confirmText: "Edit",
+      confirmColor: "bg-blue-600 hover:bg-blue-700",
+    });
+  };
+
+  const handleConfirm = async () => {
+    try {
+      if (confirmationModal.action === "delete") {
+        await deleteService(confirmationModal.payload);
+        setServices((prevList) =>
+          prevList.filter(
+            (service) =>
+              String(service.id) !== String(confirmationModal.payload)
+          )
+        );
+      } else if (confirmationModal.action === "toggle") {
+        await toggleServiceStatus(
+          confirmationModal.payload.id,
+          confirmationModal.payload.currentStatus
+        );
+        setServices(
+          services.map((service) =>
+            service.id === confirmationModal.payload.id
+              ? { ...service, isActive: !service.isActive }
+              : service
+          )
+        );
+      } else if (confirmationModal.action === "edit") {
+        await fetchServiceDetails(confirmationModal.payload, true);
+      } else if (confirmationModal.action === "save") {
+        await handleUpdate();
       }
+    } catch (error) {
+      console.error("Error performing action:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setConfirmationModal({ isOpen: false, action: null, payload: null });
     }
-    return times;
   };
 
+  if (!isAuthChecked) {
+    return null;
+  }
 
- 
-
-  if (!isAuthChecked) {  
-    return null }
-
-
-return (
+  return (
     <div className="p-8 space-y-12 text-black min-h-screen bg-gradient-to-br from-slate-800 to-slate-900">
-      <BackButton/>
-      <h1 className="text-4xl underline w-full mx-auto flex justify-center font-bold text-amber-50 py-5 ">Admin Panel</h1>
+      <BackButton />
+      <h1 className="text-4xl underline w-full mx-auto flex justify-center font-bold text-amber-50 py-5 ">
+        Admin Panel
+      </h1>
 
       {/* SERVICES TABLE */}
       <section className="py-5">
@@ -260,7 +338,7 @@ return (
           <div className="overflow-y-auto max-h-[40vh]">
             <table className="min-w-full table-fixed">
               <thead className="bg-gray-200 sticky top-0">
-                <tr>
+                <tr className="text-xl">
                   <th className="w-1/5 text-left py-3 px-4 border-b">
                     Service
                   </th>
@@ -274,7 +352,7 @@ return (
               <tbody>
                 {services.length > 0 ? (
                   services.map((service, index) => (
-                    <tr key={index} className="even:bg-gray-50">
+                    <tr key={index} className="even:bg-gray-50 text-lg">
                       <td className="py-3 px-4 border-b truncate">
                         {service.serviceName}
                       </td>
@@ -301,48 +379,34 @@ return (
                       <td className="py-3 px-4 border-b w-1/6">
                         {/* Options  Buttons */}
 
-                        <div className="flex flex-row space-x-4 items-center">
+                        <div className="flex text-2xl flex-row space-x-4 items-center">
                           {/* view */}
                           <button
                             onClick={() => {
                               fetchServiceDetails(service.id);
                             }}
                           >
-                            <IoEyeSharp className="text-xl text-blue-950 hover:text-blue-600" />
+                            <IoEyeSharp className=" text-blue-950 hover:text-blue-600" />
                           </button>
-
                           {/* delete */}
-                          <button onClick={() => handleDelete(service.id)}>
-                            <RiDeleteBinLine className="text-xl text-red-500 hover:text-red-700" />
+                          <button onClick={() => handleDeleteClick(service.id)}>
+                            <RiDeleteBinLine className="text-red-500 hover:text-red-700" />
                           </button>
-
                           {/* edit */}
                           <button
                             onClick={() =>
                               fetchServiceDetails(service.id, true)
                             }
                           >
-                            <FaEdit className="text-xl text-blue-500 hover:text-blue-700" />
+                            <FaEdit className="text-blue-500 hover:text-blue-700" />
                           </button>
-                          {service.isActive ? (
-                            <button
-                              onClick={() =>
-                                toggleServiceStatus(service.id, true)
-                              }
-                              title="Deactivate service"
-                            >
+                          <button onClick={() => handleToggleClick(service)}>
+                            {service.isActive ? (
                               <BsToggle2On className="text-3xl text-green-600" />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                toggleServiceStatus(service.id, false)
-                              }
-                              title="Activate service"
-                            >
+                            ) : (
                               <BsToggle2Off className="text-3xl text-gray-400" />
-                            </button>
-                          )}
+                            )}
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -363,13 +427,12 @@ return (
       {/* CHAT HISTORY TABLE (static for now) */}
       <section>
         <h2 className="text-3xl font-bold mb-6 text-white">Chat History</h2>
-            <ChatHistory/>
-
+        <ChatHistory />
       </section>
 
       {/* MODAL FOR FULL DESCRIPTION */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70  z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50  z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg max-w-xl w-full max-h-[80vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">
               {isEditMode
@@ -536,7 +599,7 @@ return (
                     <div>
                       <h3 className="font-medium text-gray-900">Price</h3>
                       <p>${Number(selectedService.price).toFixed(2)}</p>
-                      </div>
+                    </div>
                     <div>
                       <h3 className="font-medium text-gray-900">Description</h3>
                       <p className="text-gray-700">
@@ -602,19 +665,19 @@ return (
             <div className="mt-6 text-right space-x-2">
               {selectedService && (
                 <>
-                  {!isEditMode ? (
+                  {isEditMode ? (
+                    <button
+                      onClick={handleSaveClick} // Changed from handleUpdate to handleSaveClick
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                    >
+                      Save
+                    </button>
+                  ) : (
                     <button
                       onClick={() => setIsEditMode(true)}
                       className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
                     >
                       Edit
-                    </button>
-                  ) : (
-                    <button
-                      onClick={handleUpdate}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                    >
-                      Save
                     </button>
                   )}
                 </>
@@ -632,10 +695,43 @@ return (
             </div>
           </div>
         </div>
+      )}
 
-        
+      {/* Beautiful Confirmation Modal */}
+      {confirmationModal.isOpen && (
+        <div className="fixed inset-0 bg-black/50 bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full overflow-hidden">
+            <div className="p-6 text-center">
+              {confirmationModal.icon}
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                {confirmationModal.title}
+              </h3>
+              <p className="text-gray-600 mb-6">{confirmationModal.message}</p>
+
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() =>
+                    setConfirmationModal({
+                      isOpen: false,
+                      action: null,
+                      payload: null,
+                    })
+                  }
+                  className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  className={`px-6 py-2 border border-transparent rounded-md text-white ${confirmationModal.confirmColor} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors`}
+                >
+                  {confirmationModal.confirmText}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
-
 }
