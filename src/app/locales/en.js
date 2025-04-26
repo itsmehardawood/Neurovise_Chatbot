@@ -1,5 +1,5 @@
 const en = {
-  phoneNumberPlaceholder:"Enter your Phone Number",
+  phoneNumberPlaceholder:`Enter valid Whatsapp Number dashes`,
   SuccessfulLogin:"Welcome, Successfully Logged in",
   loginFailed: 'Login failed. Please check your credentials.',
   email: 'Email',
