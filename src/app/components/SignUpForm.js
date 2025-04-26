@@ -13,7 +13,7 @@ const PoppinsFont = Poppins({
 });
 
 export default function SignUpForm({ locale }) {
-  const [countryCode, setCountryCode] = useState('+92');
+  const [countryCode, setCountryCode] = useState('+1');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -108,10 +108,16 @@ export default function SignUpForm({ locale }) {
                 onChange={(e) => setCountryCode(e.target.value)}
                 className="mr-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
-                <option value="+92">+92</option>
                 <option value="+1">+1</option>
                 <option value="+44">+44</option>
                 <option value="+91">+91</option>
+                <option value="+91">+91</option>
+                <option value="+971">+971</option>
+                <option value="+972">+972</option>
+
+
+
+
                 {/* Add more country codes here if you want */}
               </select>
               

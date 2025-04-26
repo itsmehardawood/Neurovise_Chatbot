@@ -62,13 +62,13 @@ export default function HomePage() {
 
       {/* 📄 Main content */}
       <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col justify-center items-center gap-6 p-6 relative">
-        {/* <Image
+        <Image
           src="/images/logo.png"
           height={300}
           width={300}
           alt="this is our logo"
           priority
-        /> */}
+        />
 
         {/* Floating button to toggle the chat widget */}
         <div
