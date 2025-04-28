@@ -607,6 +607,12 @@ export default function ServicesAdminPage() {
                       </p>
                     </div>
                     <div>
+                      <h3 className="font-medium text-gray-900">System Prompt</h3>
+                      <p className="text-gray-700">
+                        {selectedService.system_prompt}
+                      </p>
+                    </div>
+                    <div>
                       <h3 className="font-medium text-gray-900">Status</h3>
                       <p className="text-gray-700">
                         <span

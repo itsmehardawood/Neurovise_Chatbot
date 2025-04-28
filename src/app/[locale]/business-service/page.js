@@ -25,6 +25,7 @@ const ServiceManagement = () => {
   const [services, setServices] = useState([]);
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
+  const [systemmsg, setSystemmsg]= useState("");
   const [priceType, setPriceType] = useState(t("flatFee"));
   const [price, setPrice] = useState("");
   const [isActive, setIsActive] = useState(true);
@@ -92,6 +93,7 @@ const ServiceManagement = () => {
             services: [newService],
             working_hours: {},
             chat_tone: selectedTone,
+            system_prompt: systemmsg,            
           }),
         }
       );
@@ -105,6 +107,7 @@ const ServiceManagement = () => {
       // Reset fields
       setServiceName("");
       setDescription("");
+      setSystemmsg("")
       setPrice("");
       setIsActive(true);
       setTimeout(() => setAddServiceSuccess(false), 3000);
@@ -233,6 +236,27 @@ const ServiceManagement = () => {
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     {description.length}/500 {t("characters")}
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="systemmsg"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    {t("System Prompt")} {t("optional")}
+                  </label>
+                  <textarea
+                    id="systemmsg"
+                    placeholder={t("Add business service system prompt")}
+                    value={systemmsg}
+                    onChange={(e) => setSystemmsg(e.target.value)}
+                    rows={2}
+                    maxLength={200}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    {systemmsg.length}/200 {t("characters")}
                   </p>
                 </div>
 
