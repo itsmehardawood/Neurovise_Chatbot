@@ -10,6 +10,7 @@ import WhatsAppButton from "../components/Whatspp";
 import ScriptGenerator from "../components/ScriptGenrator";
 import LanguageButton from "../components/LanguageButton";
 import Navbar from "../components/Navbar";
+import SystemPromptButton from "../components/SystemPromptButton";
 
 export default function HomePage() {
   const router = useRouter();
@@ -52,20 +53,21 @@ export default function HomePage() {
 
   return (
     <>
-    {/* <Navbar/> */}
       {/* 🔒 Floating logout button */}
-      <div className="fixed top-4 right-25 z-50">
-        <LogoutButton />
-        <LanguageButton />
+      <div className="">
+        {/* <LogoutButton />
+        <LanguageButton /> */}
+
+        <Navbar/>
 
       </div>
 
       {/* 📄 Main content */}
-      <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col justify-center items-center gap-6 p-6 relative">
-        <Image
+      <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col py-20 items-center gap-6 p-6 relative">
+      <Image
           src="/images/logo.png"
-          height={300}
-          width={300}
+          height={150}
+          width={150}
           alt="this is our logo"
           priority
         />
@@ -93,6 +95,10 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold mb-6 drop-shadow">{t("welcome")}</h1>
 
         <div className="flex flex-col gap-4 w-full max-w-xs justify-center items-center">
+
+          <SystemPromptButton locale={locale}/>
+
+
           <button
             onClick={() => router.push(`/${locale}/admin-panel`)}
             className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"

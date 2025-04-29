@@ -1,59 +1,82 @@
 'use client';
 
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useTranslation } from '@/lib/translations';
+import { useRouter, useParams, usePathname } from "next/navigation";
+import { useTranslation } from "@/lib/translations";
+import Image from "next/image";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import LanguageButton from "./LanguageButton";
 
-
-export default function Navbar({ locale = 'en', isAdmin = false, onLogout }) {
+const Navbar = () => {
   const router = useRouter();
-  const [selectedLocale, setSelectedLocale] = useState(locale);
+  const pathname = usePathname();
+  const { locale } = useParams();
   const t = useTranslation(locale);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLanguageChange = (lang) => {
-    setSelectedLocale(lang);
-    router.push(`/${lang}`);
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+    router.push(`/${locale}/login`);
+    setMenuOpen(false); // close menu on logout
   };
 
   return (
-    <nav className="w-full bg-slate-800 shadow-md px-6 py-4 flex items-center justify-between">
-      {/* Logo */}
-      <div className="text-xl font-bold text-blue-600">
-        <Link href={`/${selectedLocale}`}>EcoBot</Link>
-      </div>
+    <>
+      {/* Navbar */}
+      <nav className="w-full bg-gray-800 text-white shadow-md px-10 sm:px-8 py-4 z-50 relative">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div >
+          <Image
+            src="/images/logo.png"
+            height={100}
+            width={100}
+            alt="Logo"
+            priority
+          />
+          </div>
+        
 
-      {/* Right side buttons */}
-      <div className="flex items-center space-x-4">
-        {/* Admin Panel Button (if admin) */}
-        {isAdmin && (
-          <Link
-            href={`/${selectedLocale}/admin`}
-            className="text-sm font-medium text-gray-700 hover:text-blue-600"
+          {/* Hamburger for small screens */}
+          <div className="sm:hidden">
+            <button onClick={() => setMenuOpen(!menuOpen)}>
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Inline menu for large screens */}
+          <div className="hidden sm:flex items-center gap-4">
+            <LanguageButton />
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 transition"
+            >
+              {t("logout")}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Fullscreen Overlay Menu */}
+      {menuOpen && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center gap-6 z-[100]">
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-4 right-4 text-white"
           >
-            Admin Panel
-          </Link>
-        )}
-
-        {/* Language Selector */}
-        <select
-          value={selectedLocale}
-          onChange={(e) => handleLanguageChange(e.target.value)}
-          className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none"
-        >
-          <option value="en">English</option>
-          <option value="he">עברית</option>
-        </select>
-
-        {/* Logout Button */}
-        <button
-          onClick={onLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 text-sm rounded-md transition"
-        >
-                      {t('logout')}  
-
-        </button>
-      </div>
-    </nav>
+            <X size={32} />
+          </button>
+          <LanguageButton />
+          <button
+            onClick={handleLogout}
+            className="px-6 py-3 rounded bg-red-500 hover:bg-red-600 transition text-lg"
+          >
+            {t("logout")}
+          </button>
+        </div>
+      )}
+    </>
   );
-}
+};
+
+export default Navbar;

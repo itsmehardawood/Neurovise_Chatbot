@@ -2,9 +2,9 @@
 
 import { useRouter, usePathname, useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown } from 'lucide-react'; // Optional icon library
+import { ChevronDown } from 'lucide-react';
 
-const LanguageButton = () => {
+const FloatingLanguageButton = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { locale } = useParams();
@@ -19,7 +19,6 @@ const LanguageButton = () => {
     setOpen(false);
   };
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -33,7 +32,7 @@ const LanguageButton = () => {
   }, []);
 
   return (
-    <div className="relative z-50" ref={dropdownRef}>
+    <div className="absolute top-4 right-4 z-50" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
@@ -43,16 +42,16 @@ const LanguageButton = () => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-36 bg-slate-800 border rounded shadow-md">
+        <div className="absolute right-0 mt-2 w-36 bg-slate-800 border border-gray-600 rounded shadow-md">
           <button
             onClick={() => switchLanguage('en')}
-            className="block w-full px-4 py-2 text-left hover:bg-slate-500"
+            className="block w-full px-4 py-2 text-left hover:bg-slate-600 text-white"
           >
             English
           </button>
           <button
             onClick={() => switchLanguage('he')}
-            className="block w-full px-4 py-2 text-left hover:bg-slate-500"
+            className="block w-full px-4 py-2 text-left hover:bg-slate-600 text-white"
           >
             עברית
           </button>
@@ -62,4 +61,4 @@ const LanguageButton = () => {
   );
 };
 
-export default LanguageButton;
+export default FloatingLanguageButton;

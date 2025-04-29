@@ -55,6 +55,7 @@ const en = {
   emailPlaceholderLogin: 'Enter your email to login',
   passwordPlaceholderLogin: 'Enter your password to login',
   logout: "Logout",
+  ManageSystemPrompt: "Manage System Prompt",
 
   // New translations for ServiceManagement component
   serviceManagement: 'Service Management',

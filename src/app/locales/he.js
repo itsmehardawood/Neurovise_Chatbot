@@ -55,6 +55,8 @@ const he = {
   emailPlaceholderLogin: 'הזן את האימייל שלך להתחברות',
   passwordPlaceholderLogin: 'הזן את הסיסמה שלך להתחברות',
   logout: "התנתקות",
+  ManageSystemPrompt: "ניהול הנחיית מערכת",
+
 
 
   // New translations for ServiceManagement component

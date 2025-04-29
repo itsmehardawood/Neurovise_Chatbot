@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import BackButton from "@/app/components/BackButton";
 import LogoutButton from "@/app/components/LogoutButton";
 import LanguageButton from "@/app/components/LanguageButton";
+import FloatingLanguageButton from "@/app/components/FloatingLanguagebutton";
+import Navbar from "@/app/components/Navbar";
 
 const PoppinsFont = Poppins({
   subsets: ["latin"],
@@ -25,7 +27,6 @@ const ServiceManagement = () => {
   const [services, setServices] = useState([]);
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
-  const [systemmsg, setSystemmsg]= useState("");
   const [priceType, setPriceType] = useState(t("flatFee"));
   const [price, setPrice] = useState("");
   const [isActive, setIsActive] = useState(true);
@@ -93,7 +94,6 @@ const ServiceManagement = () => {
             services: [newService],
             working_hours: {},
             chat_tone: selectedTone,
-            system_prompt: systemmsg,            
           }),
         }
       );
@@ -107,7 +107,6 @@ const ServiceManagement = () => {
       // Reset fields
       setServiceName("");
       setDescription("");
-      setSystemmsg("")
       setPrice("");
       setIsActive(true);
       setTimeout(() => setAddServiceSuccess(false), 3000);
@@ -151,22 +150,23 @@ const ServiceManagement = () => {
     return (
       <>
         <div className=" top-4 right-25 z-50">
-          <LogoutButton />
-          <LanguageButton />
-        </div>
+          {/* <LogoutButton />
+          <FloatingLanguageButton/> */}
+          <Navbar />
+          </div>
 
         <div
           className={`min-h-screen text-black bg-slate-900 bg-gradient-to-bl from-blue-900 via-transparent to-blue-900 ${PoppinsFont.variable} font-sans`}
         >
-          <BackButton />
+          {/* <BackButton /> */}
 
-          <div className="container mx-auto px-3 pb-4">
-            <Image
+          <div className="container mx-auto px-3 py-4">
+            {/* <Image
               src="/images/logo.png"
               height="180"
               width="180"
               alt="this is our logo"
-            />
+            /> */}
 
             <div className="bg-white p-5 rounded-lg shadow-md max-w-4xl mx-auto">
               <h1 className="text-gray-900 text-xl font-semibold mb-6">
@@ -231,34 +231,14 @@ const ServiceManagement = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={2}
-                    maxLength={500}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    {description.length}/500 {t("characters")}
+                    {description.length} {t("characters")}
                   </p>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="systemmsg"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    {t("System Prompt")} {t("optional")}
-                  </label>
-                  <textarea
-                    id="systemmsg"
-                    placeholder={t("Add business service system prompt")}
-                    value={systemmsg}
-                    onChange={(e) => setSystemmsg(e.target.value)}
-                    rows={2}
-                    maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    {systemmsg.length}/200 {t("characters")}
-                  </p>
-                </div>
+              
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
