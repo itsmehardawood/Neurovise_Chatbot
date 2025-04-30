@@ -4,11 +4,9 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/lib/translations";
 import Image from "next/image";
-import LogoutButton from "../components/LogoutButton";
 import ChatbotWidget from "../components/chatbot_widget";
 import WhatsAppButton from "../components/Whatspp";
 import ScriptGenerator from "../components/ScriptGenrator";
-import LanguageButton from "../components/LanguageButton";
 import Navbar from "../components/Navbar";
 import SystemPromptButton from "../components/SystemPromptButton";
 
@@ -63,7 +61,7 @@ export default function HomePage() {
       </div>
 
       {/* 📄 Main content */}
-      <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col py-20 items-center gap-6 p-6 relative">
+      <div className="min-h-screen bg-gradient-to-tl from-slate-700 to-slate-900 text-white flex flex-col py-20 items-center gap-6 p-6 relative">
       <Image
           src="/images/logo.png"
           height={150}

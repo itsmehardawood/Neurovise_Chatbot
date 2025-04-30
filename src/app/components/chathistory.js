@@ -73,7 +73,7 @@ const ChatHistory = () => {
   };
 
   return (
-    <div className="p-2">
+    <div className="p-2 bg-gray-600 rounded-lg px-3 py-5">
 
       {loading ? (
         <div className="bg-white rounded-xl p-8 text-center shadow-sm">

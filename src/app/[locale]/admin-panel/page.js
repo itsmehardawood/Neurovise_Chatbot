@@ -334,10 +334,10 @@ export default function ServicesAdminPage() {
 
       {/* SERVICES TABLE */}
       <section className="py-5">
-  <h1 className="text-3xl font-bold text-white mb-8">Services</h1>
+  <h1 className="text-4xl font-bold text-white mb-8 flex justify-center bg-amber-600  p-2 rounded-2xl">Services</h1>
 
   {services.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-600 rounded-lg px-3 py-5">
       {services.map((service, index) => (
         <div 
           key={index} 
@@ -451,7 +451,7 @@ export default function ServicesAdminPage() {
 
       {/* CHAT HISTORY TABLE (static for now) */}
       <section>
-        <h2 className="text-3xl font-bold mb-6 text-white">Chat History</h2>
+        <h2 className="text-4xl w-full mx-auto flex justify-center font-bold mb-6 bg-amber-600 p-2 rounded-2xl text-white">Chat History</h2>
         <ChatHistory />
       </section>
 
