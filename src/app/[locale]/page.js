@@ -96,7 +96,6 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-4 w-full max-w-xs justify-center items-center">
 
-          <SystemPromptButton locale={locale}/>
 
 
           <button
@@ -113,8 +112,11 @@ export default function HomePage() {
             {t("manageBusiness")}
           </button>
 
+          <SystemPromptButton locale={locale}/>
+
+
           {/* Button to generate script tag */}
-                    <ScriptGenerator userId={userId} locale={locale}  />
+          <ScriptGenerator userId={userId} locale={locale}  />
                     
 
        

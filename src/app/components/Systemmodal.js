@@ -7,101 +7,104 @@ export default function SystemPromptModal({ isOpen, onClose }) {
   const [systemPrompt, setSystemPrompt] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Fetch the system prompt when the modal opens
   const fetchPrompt = async () => {
     try {
-      const token = localStorage.getItem("access_token"); // Token from local storage
-      const res = await axios.get('http://localhost:8000/business-service/system-prompt', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSystemPrompt(res.data.system_prompt); // Set the fetched system prompt
+      const token = localStorage.getItem("access_token");
+      const res = await axios.get(
+        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSystemPrompt(res.data.system_prompt);
     } catch (err) {
       console.error('Fetch error:', err);
     }
   };
 
   useEffect(() => {
-    if (isOpen) fetchPrompt(); // Fetch the prompt when the modal opens
+    if (isOpen) fetchPrompt();
   }, [isOpen]);
 
-  // Save the updated system prompt
   const handleSave = async () => {
     const token = localStorage.getItem("access_token");
-  
+
     try {
-      setLoading(true); // Set loading state to true while saving
+      setLoading(true);
       const response = await axios.put(
-        "http://localhost:8000/business-service/system-prompt",
-        { system_prompt: systemPrompt }, // Ensure the body is in the correct format
+        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        { system_prompt: systemPrompt },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      console.log("Save successful", response.data);
-      onClose(); // Close the modal after successful save
+      console.log('Save successful', response.data);
+      onClose();
     } catch (error) {
-      console.error("Save error:", error.response?.data || error.message);
+      console.error('Save error:', error.response?.data || error.message);
     } finally {
-      setLoading(false); // Set loading state to false after saving
+      setLoading(false);
     }
   };
 
-  // Delete the system prompt
   const handleDelete = async () => {
-    setLoading(true); // Set loading state to true while deleting
+    setLoading(true);
     try {
-      const token = localStorage.getItem("access_token"); // Get the token from local storage
+      const token = localStorage.getItem('access_token');
 
-      await axios.delete('http://localhost:8000/business-service/system-prompt', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSystemPrompt(''); // Reset the system prompt state
-      onClose(); // Close the modal after successful delete
+      await axios.delete(
+        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSystemPrompt('');
+      onClose();
     } catch (err) {
       console.error('Delete error:', err);
     } finally {
-      setLoading(false); // Set loading state to false after deletion
+      setLoading(false);
     }
   };
 
-  if (!isOpen) return null; // Do not render modal if it's not open
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 text-black bg-opacity-40 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">Edit System Prompt</h2>
+    <div className="fixed inset-0 z-50 flex text-black items-center justify-center bg-black/50 px-4 py-6 sm:px-6">
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Edit System Prompt</h2>
         <textarea
-  value={systemPrompt || ''} // Ensure the value is never null, defaulting to an empty string
-  onChange={(e) => setSystemPrompt(e.target.value)} // Update systemPrompt state on change
-          className="w-full h-32 p-2 border rounded-lg"
+          value={systemPrompt || ''}
+          onChange={(e) => setSystemPrompt(e.target.value)}
+          className="w-full h-60 sm:h-64 p-3 sm:p-4 text-base sm:text-lg border border-gray-300 rounded-xl resize-none"
         />
-        <div className="mt-4 flex justify-between">
+        <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row justify-between gap-3 sm:gap-0">
           <button
             onClick={handleDelete}
-            className="px-4 py-2 bg-red-500 text-white rounded-xl"
-            disabled={loading} // Disable button while loading
+            className="w-full sm:w-auto px-5 py-3 bg-red-600 text-white text-base font-medium rounded-xl hover:bg-red-700 transition disabled:opacity-50"
+            disabled={loading}
           >
             Delete
           </button>
-          <div className="space-x-2">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={onClose} // Close modal
-              className="px-4 py-2 border rounded-xl"
-              disabled={loading} // Disable button while loading
+              onClick={onClose}
+              className="w-full sm:w-auto px-5 py-3 border border-gray-400 text-base font-medium rounded-xl hover:bg-gray-100 transition disabled:opacity-50"
+              disabled={loading}
             >
               Cancel
             </button>
             <button
-              onClick={handleSave} // Save the prompt
-              className="px-4 py-2 bg-blue-600 text-white rounded-xl"
-              disabled={loading} // Disable button while loading
+              onClick={handleSave}
+              className="w-full sm:w-auto px-5 py-3 bg-blue-700 text-white text-base font-medium rounded-xl hover:bg-blue-800 transition disabled:opacity-50"
+              disabled={loading}
             >
               Save
             </button>

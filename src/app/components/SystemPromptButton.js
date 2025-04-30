@@ -11,7 +11,7 @@ export default function SystemPromptButton({locale}) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="px-4 py-2 bg-indigo-600 text-white rounded-xl"
+        className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
       >
        {t('ManageSystemPrompt')}
       </button>
