@@ -20,7 +20,8 @@ export default function ServicesAdminPage() {
   const [selectedDescription, setSelectedDescription] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Set initial loading state to true
+  const [isLoadingService, setIsLoadingService] = useState(false); // Separate loading state for service details
   const [isEditMode, setIsEditMode] = useState(false);
   const [editForm, setEditForm] = useState({
     serviceName: "",
@@ -34,8 +35,8 @@ export default function ServicesAdminPage() {
     payload: null,
   });
 
-  const router = useRouter(); // <-- Add this
-  const { locale } = useParams(); // <
+  const router = useRouter();
+  const { locale } = useParams();
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -48,6 +49,7 @@ export default function ServicesAdminPage() {
 
   useEffect(() => {
     const fetchServices = async () => {
+      setIsLoading(true); // Set loading to true when fetching starts
       try {
         const token = localStorage.getItem("access_token");
 
@@ -63,6 +65,7 @@ export default function ServicesAdminPage() {
 
         if (!response.ok) {
           router.push(`/${locale}/login`);
+          return;
         }
 
         const data = await response.json();
@@ -71,11 +74,15 @@ export default function ServicesAdminPage() {
         setChatTone(data.chat_tone || "");
       } catch (error) {
         console.error("Error fetching services:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false when fetching completes (success or error)
       }
     };
 
-    fetchServices();
-  }, []);
+    if (isAuthChecked) {
+      fetchServices();
+    }
+  }, [isAuthChecked, locale, router]);
 
   const handleViewMore = (desc) => {
     setSelectedDescription(desc);
@@ -83,7 +90,7 @@ export default function ServicesAdminPage() {
   };
 
   const fetchServiceDetails = async (serviceId, editMode = false) => {
-    setIsLoading(true);
+    setIsLoadingService(true);
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
@@ -114,7 +121,7 @@ export default function ServicesAdminPage() {
       console.error("Error fetching service details:", error);
       alert(`Error loading service details: ${error.message}`);
     } finally {
-      setIsLoading(false);
+      setIsLoadingService(false);
     }
   };
 
@@ -334,120 +341,128 @@ export default function ServicesAdminPage() {
 
       {/* SERVICES TABLE */}
       <section className="py-5">
-  <h1 className="text-4xl font-bold text-white mb-8 flex justify-center bg-blue-600  p-2 rounded-2xl">Services</h1>
+        <h1 className="text-4xl font-bold text-white mb-8 flex justify-center bg-blue-600 p-2 rounded-2xl">Services</h1>
 
-  {services.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-600 rounded-lg px-3 py-5">
-      {services.map((service, index) => (
-        <div 
-          key={index} 
-          className={`relative rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl ${service.isActive ? 'bg-white' : 'bg-gray-100'}`}
-        >
-          {/* Status Badge - Moved to be part of the header row */}
-          <div className="p-6 pb-0">
-            <div className="flex justify-between items-start">
-              <div className="flex items-start space-x-2 max-w-[70%]">
-                <h3 className="text-xl font-bold text-gray-800 truncate">
-                  {service.serviceName}
-                </h3>
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800'}`}>
-                  {service.isActive ? 'Active' : 'Inactive'}
-                </span>
-              </div>
-              <span className="text-lg font-bold text-blue-600">
-                ${service.price}
-              </span>
+        {isLoading ? (
+          <div className="bg-white rounded-xl p-8 text-center shadow-sm">
+            <div className="mx-auto w-24 h-24 flex items-center justify-center mb-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-            
-            {/* Description with expand button */}
-            <div className="mt-4">
-              <p className="text-gray-600 text-sm line-clamp-3">
-                {service.description}
-              </p>
-              {service.description.length > 100 && (
-                <button
-                  onClick={() => handleViewMore(service.description)}
-                  className="text-blue-500 text-sm mt-1 hover:underline"
-                >
-                  Read more
-                </button>
-              )}
-            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">Loading services...</h3>
+            <p className="text-gray-500">Please wait while we fetch your services</p>
           </div>
-          
-          {/* Working Hours */}
-          <div className="p-6 pt-4">
-            <h4 className="text-sm font-semibold text-gray-500 mb-2">Working Hours</h4>
-            <div className="space-y-2">
-              {service.working_hours && Object.entries(service.working_hours).map(([day, hours]) => (
-                <div key={day} className="flex justify-between text-sm">
-                  <span className="capitalize text-gray-700">{day}</span>
-                  {hours.active ? (
-                    <span className="text-gray-600">
-                      {hours.start} - {hours.end}
+        ) : services.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-600 rounded-lg px-3 py-5">
+            {services.map((service, index) => (
+              <div 
+                key={index} 
+                className={`relative rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl ${service.isActive ? 'bg-white' : 'bg-gray-100'}`}
+              >
+                {/* Status Badge - Moved to be part of the header row */}
+                <div className="p-6 pb-0">
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-start space-x-2 max-w-[70%]">
+                      <h3 className="text-xl font-bold text-gray-800 truncate">
+                        {service.serviceName}
+                      </h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800'}`}>
+                        {service.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                    <span className="text-lg font-bold text-blue-600">
+                      ${service.price}
                     </span>
-                  ) : (
-                    <span className="text-gray-400">Closed</span>
-                  )}
+                  </div>
+                  
+                  {/* Description with expand button */}
+                  <div className="mt-4">
+                    <p className="text-gray-600 text-sm line-clamp-3">
+                      {service.description}
+                    </p>
+                    {service.description.length > 100 && (
+                      <button
+                        onClick={() => handleViewMore(service.description)}
+                        className="text-blue-500 text-sm mt-1 hover:underline"
+                      >
+                        Read more
+                      </button>
+                    )}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Action Buttons */}
-          <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-between">
-            <div className="flex space-x-3">
-              {/* View Button */}
-              <button
-                onClick={() => fetchServiceDetails(service.id)}
-                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                title="View details"
-              >
-                <IoEyeSharp className="h-5 w-5 text-blue-600" />
-              </button>
-              
-              {/* Edit Button */}
-              <button
-                onClick={() => fetchServiceDetails(service.id, true)}
-                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                title="Edit"
-              >
-                <FaEdit className="h-5 w-5 text-yellow-600" />
-              </button>
-              
-              {/* Delete Button */}
-              <button
-                onClick={() => handleDeleteClick(service.id)}
-                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                title="Delete"
-              >
-                <RiDeleteBinLine className="h-5 w-5 text-red-600" />
-              </button>
-            </div>
-            
-            {/* Toggle Switch */}
-            <button 
-              onClick={() => handleToggleClick(service)}
-              className="flex items-center"
-            >
-              <div className={`relative rounded-full w-12 h-6 transition-colors ${service.isActive ? 'bg-green-500' : 'bg-gray-300'}`}>
-                <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${service.isActive ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                
+                {/* Working Hours */}
+                <div className="p-6 pt-4">
+                  <h4 className="text-sm font-semibold text-gray-500 mb-2">Working Hours</h4>
+                  <div className="space-y-2">
+                    {service.working_hours && Object.entries(service.working_hours).map(([day, hours]) => (
+                      <div key={day} className="flex justify-between text-sm">
+                        <span className="capitalize text-gray-700">{day}</span>
+                        {hours.active ? (
+                          <span className="text-gray-600">
+                            {hours.start} - {hours.end}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">Closed</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-between">
+                  <div className="flex space-x-3">
+                    {/* View Button */}
+                    <button
+                      onClick={() => fetchServiceDetails(service.id)}
+                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                      title="View details"
+                    >
+                      <IoEyeSharp className="h-5 w-5 text-blue-600" />
+                    </button>
+                    
+                    {/* Edit Button */}
+                    <button
+                      onClick={() => fetchServiceDetails(service.id, true)}
+                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                      title="Edit"
+                    >
+                      <FaEdit className="h-5 w-5 text-yellow-600" />
+                    </button>
+                    
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => handleDeleteClick(service.id)}
+                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                      title="Delete"
+                    >
+                      <RiDeleteBinLine className="h-5 w-5 text-red-600" />
+                    </button>
+                  </div>
+                  
+                  {/* Toggle Switch */}
+                  <button 
+                    onClick={() => handleToggleClick(service)}
+                    className="flex items-center"
+                  >
+                    <div className={`relative rounded-full w-12 h-6 transition-colors ${service.isActive ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${service.isActive ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                    </div>
+                  </button>
+                </div>
               </div>
-            </button>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <div className="bg-white rounded-xl p-8 text-center shadow-sm">
-      <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-        <MdOutlineMiscellaneousServices className="h-12 w-12 text-gray-400" />
-      </div>
-      <h3 className="text-xl font-medium text-gray-900 mb-2">No services available</h3>
-      <p className="text-gray-500">There are currently no services to display</p>
-    </div>
-  )}
-</section>
+        ) : (
+          <div className="bg-white rounded-xl p-8 text-center shadow-sm">
+            <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <MdOutlineMiscellaneousServices className="h-12 w-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">No services available</h3>
+            <p className="text-gray-500">There are currently no services to display</p>
+          </div>
+        )}
+      </section>
 
       {/* CHAT HISTORY TABLE (static for now) */}
       <section>
@@ -467,7 +482,7 @@ export default function ServicesAdminPage() {
                 : "Full Description"}
             </h2>
 
-            {isLoading ? (
+            {isLoadingService ? (
               <div className="flex justify-center items-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
               </div>
@@ -693,7 +708,7 @@ export default function ServicesAdminPage() {
                 <>
                   {isEditMode ? (
                     <button
-                      onClick={handleSaveClick} // Changed from handleUpdate to handleSaveClick
+                      onClick={handleSaveClick}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                     >
                       Save
