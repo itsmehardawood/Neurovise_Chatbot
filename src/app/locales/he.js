@@ -56,6 +56,8 @@ const he = {
   passwordPlaceholderLogin: 'הזן את הסיסמה שלך להתחברות',
   logout: "התנתקות",
   ManageSystemPrompt: "ניהול הנחיית מערכת",
+  rememberMe: "זכור סיסמה",
+
 
 
 

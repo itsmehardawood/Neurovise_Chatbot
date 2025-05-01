@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/translations';
@@ -10,8 +10,21 @@ function LoginForm({ locale = 'he' }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Load saved credentials if available
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('remembered_email');
+    const savedPassword = localStorage.getItem('remembered_password');
+    
+    if (savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,6 +52,16 @@ function LoginForm({ locale = 'he' }) {
 
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
+
+        // Save credentials if "Remember Me" is checked
+        if (rememberMe) {
+          localStorage.setItem('remembered_email', email);
+          localStorage.setItem('remembered_password', password);
+        } else {
+          // Clear remembered credentials if unchecked
+          localStorage.removeItem('remembered_email');
+          localStorage.removeItem('remembered_password');
+        }
 
         setSuccessMessage(t('SuccessfulLogin'));
         setError(null);
@@ -98,6 +121,20 @@ function LoginForm({ locale = 'he' }) {
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
+          </div>
+
+          <div className="flex items-center mb-4">
+            <input
+              id="rememberMe"
+              name="rememberMe"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700">
+              {t('rememberMe') || 'Remember me'}
+            </label>
           </div>
 
           <button

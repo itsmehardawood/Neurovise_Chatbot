@@ -56,6 +56,7 @@ const en = {
   passwordPlaceholderLogin: 'Enter your password to login',
   logout: "Logout",
   ManageSystemPrompt: "Manage System Prompt",
+  rememberMe: "Remember Password",
 
   // New translations for ServiceManagement component
   serviceManagement: 'Service Management',
