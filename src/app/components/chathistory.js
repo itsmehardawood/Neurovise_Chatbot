@@ -346,15 +346,15 @@ const ChatHistory = () => {
             >
               <div className="p-6">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-800 truncate max-w-[70%]">
+                  <div className="flex-1 pr-2">
+                    <h3 className="text-xl font-bold text-gray-800 break-words">
                       {session.full_name || "Anonymous User"}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">
                       {formatTimeAgo(session.created_at)}
                     </p>
                   </div>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 flex-shrink-0">
                     {session.messages.length} messages
                   </span>
                 </div>
@@ -362,7 +362,7 @@ const ChatHistory = () => {
                 <div className="mt-4 space-y-2">
                   <div className="flex items-center text-sm text-gray-600">
                     <span className="font-medium mr-2">Email:</span>
-                    <span className="truncate">{session.email || "Not provided"}</span>
+                    <span className="overflow-auto">{session.email || "Not provided"}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
                     <span className="font-medium mr-2">Phone:</span>
@@ -397,11 +397,11 @@ const ChatHistory = () => {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-2xl h-full md:h-[80vh] overflow-y-auto shadow-2xl relative">
             <div className="sticky top-0 bg-white p-6 border-b border-gray-200 flex justify-between items-center">
-              <h2 className="text-xl font-semibold">
+              <h2 className="text-xl font-semibold break-words pr-4">
                 Chat with {selectedSession.full_name || "Anonymous User"}
               </h2>
               <button
-                className="text-gray-500 hover:text-red-600 text-2xl"
+                className="text-gray-500 hover:text-red-600 text-2xl flex-shrink-0"
                 onClick={closeModal}
               >
                 <IoMdClose />
@@ -413,7 +413,7 @@ const ChatHistory = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="font-medium text-gray-500">Email</p>
-                    <p>{selectedSession.email || "Not provided"}</p>
+                    <p className="break-words">{selectedSession.email || "Not provided"}</p>
                   </div>
                   <div>
                     <p className="font-medium text-gray-500">Phone</p>
