@@ -3,17 +3,12 @@ import { Poppins } from "next/font/google";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslation } from "@/lib/translations";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import BackButton from "@/app/components/BackButton";
-import LogoutButton from "@/app/components/LogoutButton";
-import LanguageButton from "@/app/components/LanguageButton";
-import FloatingLanguageButton from "@/app/components/FloatingLanguagebutton";
 import Navbar from "@/app/components/Navbar";
 
 const PoppinsFont = Poppins({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600"],
   variable: "--font-poppins",
 });
 
@@ -27,8 +22,6 @@ const ServiceManagement = () => {
   const [services, setServices] = useState([]);
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
-  const [priceType, setPriceType] = useState(t("flatFee"));
-  const [price, setPrice] = useState("");
   const [isActive, setIsActive] = useState(true);
 
   // Working Hours State
@@ -53,8 +46,8 @@ const ServiceManagement = () => {
     e.preventDefault();
 
     // Basic validation
-    if (!serviceName.trim() || !price.trim()) {
-      setSubmitError(t("Please Fill out the required Fields")); // Or hardcode a message like "Please fill in required fields."
+    if (!serviceName.trim()) {
+      setSubmitError(t("Please Fill out the required Fields"));
       return;
     }
 
@@ -69,8 +62,6 @@ const ServiceManagement = () => {
     const newService = {
       serviceName,
       description,
-      priceType,
-      price,
       isActive,
       id: Date.now(),
       working_hours: convertWorkingHours(workingHours),
@@ -83,7 +74,7 @@ const ServiceManagement = () => {
 
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        "https://ecochatbot-production.up.railway.app/business-service",
+        "http://localhost:8000/business-service",
         {
           method: "POST",
           headers: {
@@ -107,7 +98,6 @@ const ServiceManagement = () => {
       // Reset fields
       setServiceName("");
       setDescription("");
-      setPrice("");
       setIsActive(true);
       setTimeout(() => setAddServiceSuccess(false), 3000);
     } catch (error) {
@@ -148,313 +138,303 @@ const ServiceManagement = () => {
 
   if (isAuthChecked) {
     return (
-      <>
-        <div className=" top-4 right-25 z-50">
-          {/* <LogoutButton />
-          <FloatingLanguageButton/> */}
-          <Navbar />
-          </div>
+      <div
+        className={`min-h-screen ${PoppinsFont.variable} font-sans bg-cyan-900 bg-gradient-to-tl  via-transparent  rtl:bg-gradient-to-br from-cyan-600 to-cyan-900 text-white`}
+      >
+        <Navbar />
 
-        <div
-          className={`min-h-screen text-black bg-slate-900 bg-gradient-to-bl from-blue-900 via-transparent to-blue-900 ${PoppinsFont.variable} font-sans`}
-        >
-          {/* <BackButton /> */}
-
-          <div className="container mx-auto px-3 py-4">
-            {/* <Image
-              src="/images/logo.png"
-              height="180"
-              width="180"
-              alt="this is our logo"
-            /> */}
-
-            <div className="bg-white p-5 rounded-lg shadow-md max-w-4xl mx-auto">
-              <h1 className="text-gray-900 text-xl font-semibold mb-6">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-5xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-10">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {t("serviceManagement")}
               </h1>
+              <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
+            </div>
 
-              {/* Service Form */}
-              <form onSubmit={handleServiceSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="serviceName"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      {t("serviceName")}*
-                    </label>
-                    <input
-                      type="text"
-                      id="serviceName"
-                      placeholder={t("acService")}
-                      value={serviceName}
-                      onChange={(e) => setServiceName(e.target.value)}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="priceType"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      {t("pricingType")}*
-                    </label>
-                    <select
-                      id="priceType"
-                      value={priceType}
-                      onChange={(e) => setPriceType(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value={t("flatFee")}>{t("flatFee")}</option>
-                      <option value={t("pricePerHour")}>
-                        {t("pricePerHour")}
-                      </option>
-                      <option value={t("customPricing")}>
-                        {t("customPricing")}
-                      </option>
-                    </select>
-                  </div>
+            {/* Main Content */}
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl overflow-hidden shadow-xl border border-white/10">
+              {/* Status Messages */}
+              {submitError && (
+                <div className="mx-6 mt-6 p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+                  <p className="text-sm text-red-200 font-medium">{submitError}</p>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    {t("description")} {t("optional")}
-                  </label>
-                  <textarea
-                    id="description"
-                    placeholder={t("serviceNeed")}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    {description.length} {t("characters")}
+              )}
+              {(submitSuccess || addServiceSuccess) && (
+                <div className="mx-6 mt-6 p-3 bg-green-500/20 border border-green-500/50 rounded-lg">
+                  <p className="text-sm text-green-200 font-medium">
+                    {t("Service Setting Added Succesfully")}
                   </p>
                 </div>
+              )}
 
-              
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label
-                      htmlFor="price"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      {t("price")}*
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-2">$</span>
-                      <input
-                        type="text"
-                        id="price"
-                        placeholder={t("priceValue")}
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                        min="0"
-                        // step="0.01"
-                        className="w-full pl-8 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
+              <div className="p-6 lg:p-8 bg-white text-black ">
+                {/* Service Form */}
+                <div className="mb-10">
+                  <h2 className="text-xl font-semibold text-black mb-6 flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
                     </div>
-                  </div>
+                    {t("ServiceDetails")}
+                  </h2>
 
-                  <div className="flex items-end">
-                    <label className="inline-flex items-center mt-2">
-                      <input
-                        type="checkbox"
-                        checked={isActive}
-                        onChange={() => setIsActive(!isActive)}
-                        className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">
-                        {t("enableService")}
-                      </span>
-                    </label>
-                  </div>
+                  <form onSubmit={handleServiceSubmit} className="space-y-6">
+                    <div className="space-y-4">
+                      <div>
+                        <label
+                          htmlFor="serviceName"
+                          className="block text-sm font-medium text-gray-800 mb-1"
+                        >
+                          {t("serviceName")}*
+                        </label>
+                        <input
+                          type="text"
+                          id="serviceName"
+                          placeholder={t("acService")}
+                          value={serviceName}
+                          onChange={(e) => setServiceName(e.target.value)}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black transition-all duration-200"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="description"
+                          className="block text-sm font-medium text-gray-800 mb-1"
+                        >
+                          {t("description")} {t("optional")}
+                        </label>
+                        <textarea
+                          id="description"
+                          placeholder={t("serviceNeed")}
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          rows={3}
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 text-black transition-all duration-200"
+                        />
+                        <p className="text-xs text-gray-800 mt-1">
+                          {description.length} {t("characters")}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center">
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isActive}
+                            onChange={() => setIsActive(!isActive)}
+                            className="sr-only peer"
+                          />
+                          <div className="w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                          <span className="ml-3 text-sm font-medium text-gray-800">
+                            {t("enableService")}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </form>
                 </div>
 
-                {/* Add Service Button moved inside form */}
-              </form>
+                {/* Working Hours */}
+                <div className="mb-10">
+                  <h2 className="text-xl font-semibold text-black mb-6 flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    {t("workingHours")}
+                  </h2>
 
-              {/* Working Hours */}
-              <div className="mt-8">
-                <h2 className="text-lg font-semibold mb-4">
-                  {t("workingHours")}
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t("day")}
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t("startTime")}
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t("endTime")}
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {t("active")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {Object.keys(workingHours).map((day) => (
-                        <tr key={day}>
-                          <td className="px-4 py-3">{day}</td>
-                          <td className="px-4 py-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.keys(workingHours).map((day) => (
+                      <div 
+                        key={day}
+                        className={`p-4 rounded-lg transition-all duration-200 ${
+                          workingHours[day].active 
+                            ? "bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30" 
+                            : "bg-white/5 border border-white/10"
+                        }`}
+                      >
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-medium text-black">{day}</span>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={workingHours[day].active}
+                              onChange={() => toggleDayActive(day)}
+                              className="sr-only peer"
+                            />
+                            <div className="w-9 h-5 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div>
+                          </label>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs text-gray-600 mb-1">
+                              {t("startTime")}
+                            </label>
                             <select
                               value={workingHours[day].start}
                               onChange={(e) =>
                                 handleTimeChange(day, "start", e.target.value)
                               }
-                              className="border rounded px-2 py-1"
+                              disabled={!workingHours[day].active}
+                              className={`w-full px-2 py-1.5 rounded-md text-sm ${
+                                workingHours[day].active
+                                  ? "bg-white/10 border border-white/20 text-gray-700"
+                                  : "bg-white/5 border border-white/10 text-gray-700"
+                              }`}
                             >
                               {Array.from({ length: 24 * 2 }, (_, i) => {
                                 const hour = Math.floor(i / 2)
                                   .toString()
                                   .padStart(2, "0");
-                                const minute = i % 2 === 0 ? "00" : "30"; // change to "15" and "45" for 15-min steps
+                                const minute = i % 2 === 0 ? "00" : "30";
                                 const time = `${hour}:${minute}`;
                                 return (
-                                  <option key={time} value={time}>
+                                  <option className="text-black"  key={time} value={time}>
                                     {time}
                                   </option>
                                 );
                               })}
                             </select>
-                          </td>
-                          <td className="px-4 py-3">
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-800 mb-1">
+                              {t("endTime")}
+                            </label>
                             <select
                               value={workingHours[day].end}
                               onChange={(e) =>
                                 handleTimeChange(day, "end", e.target.value)
                               }
-                              className="border rounded px-2 py-1"
+                              disabled={!workingHours[day].active}
+                              className={`w-full px-2 py-1.5 rounded-md text-sm ${
+                                workingHours[day].active
+                                  ? "bg-white/10 border border-white/20 text-gray-700"
+                                  : "bg-white/5 border border-white/10 text-gray-700"
+                              }`}
                             >
                               {Array.from({ length: 24 * 2 }, (_, i) => {
                                 const hour = Math.floor(i / 2)
                                   .toString()
                                   .padStart(2, "0");
-                                const minute = i % 2 === 0 ? "00" : "30"; // change to "15" and "45" for 15-min steps
+                                const minute = i % 2 === 0 ? "00" : "30";
                                 const time = `${hour}:${minute}`;
                                 return (
-                                  <option key={time} value={time}>
+                                  <option className="text-black" key={time} value={time}>
                                     {time}
                                   </option>
                                 );
                               })}
                             </select>
-                          </td>
-                          <td className="px-4 py-3">
-                            <input
-                              step="60"
-                              lang="en-GB"
-                              type="checkbox"
-                              checked={workingHours[day].active}
-                              onChange={() => toggleDayActive(day)}
-                              className="h-4 w-4"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Chat Communication Style */}
-              <div className="mt-8">
-                <h2 className="text-lg font-semibold mb-4">
-                  {t("chatCommunicationStyle")}
-                </h2>
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="friendly-tone"
-                      name="tone"
-                      checked={selectedTone === t("friendlyOption")}
-                      onChange={() => setSelectedTone(t("friendlyOption"))}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="friendly-tone"
-                      className="ml-2 block text-sm text-gray-700"
-                    >
-                      <span className="font-medium">{t("friendlyOption")}</span>{" "}
-                      - {t("warmTone")}
-                    </label>
-                  </div>
-
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="formal-tone"
-                      name="tone"
-                      checked={selectedTone === t("formalOption")}
-                      onChange={() => setSelectedTone(t("formalOption"))}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="formal-tone"
-                      className="ml-2 block text-sm text-gray-700"
-                    >
-                      <span className="font-medium">{t("formalOption")}</span> -{" "}
-                      {t("professionalTone")}
-                    </label>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Done Button */}
-              <div className="mt-8 flex justify-end gap-4">
-                <button
-                  onClick={handleSubmitAll}
-                  className="px-6 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  {t("done")}
-                </button>
-                <button
-                  onClick={handleServiceSubmit}
-                  disabled={isSubmitting}
-                  className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {isSubmitting ? t("saving") : t("addService")}
-                </button>
-              </div>
+                {/* Chat Communication Style */}
+                <div className="mb-10">
+                  <h2 className="text-xl font-semibold text-black mb-6 flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    {t("chatCommunicationStyle")}
+                  </h2>
 
-              {/* Status Messages */}
-              {submitError && (
-                <div className="mt-4 p-3 bg-red-50 rounded-md">
-                  <p className="text-sm text-red-600">{submitError}</p>
+                  <div className="space-y-4">
+                    <div 
+                      className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all duration-200 ${
+                        selectedTone === t("friendlyOption")
+                          ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border border-blue-500/30"
+                          : "bg-white/5 border border-white/10 hover:bg-white/10"
+                      }`}
+                      onClick={() => setSelectedTone(t("friendlyOption"))}
+                    >
+                      <div className="flex-shrink-0">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                          selectedTone === t("friendlyOption")
+                            ? "bg-blue-500"
+                            : "border-2 border-white/40"
+                        }`}>
+                          {selectedTone === t("friendlyOption") && (
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-black">{t("friendlyOption")}</h3>
+                        <p className="text-sm text-gray-800">{t("warmTone")}</p>
+                      </div>
+                    </div>
+
+                    <div 
+                      className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all duration-200 ${
+                        selectedTone === t("formalOption")
+                          ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border border-blue-500/30"
+                          : "bg-white/5 border border-white/10 hover:bg-white/10"
+                      }`}
+                      onClick={() => setSelectedTone(t("formalOption"))}
+                    >
+                      <div className="flex-shrink-0">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                          selectedTone === t("formalOption")
+                            ? "bg-blue-500"
+                            : "border-2 border-white/40"
+                        }`}>
+                          {selectedTone === t("formalOption") && (
+                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-black">{t("formalOption")}</h3>
+                        <p className="text-sm text-gray-700">{t("professionalTone")}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )}
-              {submitSuccess && (
-                <div className="mt-4 p-3 bg-green-50 rounded-md">
-                  <p className="text-sm text-green-600">
-                    {t("Service Setting Added Succesfully")}
-                  </p>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-4 justify-end">
+                  <button
+                    onClick={handleSubmitAll}
+                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-green-500/20 transform transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                  >
+                    {t("done")}
+                  </button>
+                  <button
+                    onClick={handleServiceSubmit}
+                    disabled={isSubmitting}
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:shadow-lg hover:shadow-blue-500/20 transform transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        {t("saving")}
+                      </div>
+                    ) : (
+                      t("addService")
+                    )}
+                  </button>
                 </div>
-              )}
-              {addServiceSuccess && (
-                <div className="mt-4 p-3 bg-green-50 rounded-md">
-                  <p className="text-sm text-green-600">
-                    {t("Service Setting Added Succesfully")}
-                  </p>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 };

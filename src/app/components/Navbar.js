@@ -23,18 +23,13 @@ const Navbar = () => {
   return (
     <>
       {/* Navbar */}
-      <nav className="w-full bg-gray-800 text-white shadow-md px-10 sm:px-8 py-4 z-50 relative">
+      <nav className="w-full bg-gray-900 text-white shadow-md px-10 sm:px-8 py-4 z-50 relative">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div >
-          <Image
-            src="/images/logo.png"
-            height={100}
-            width={100}
-            alt="Logo"
-            priority
-          />
-          </div>
+          <div className=" flex justify-between  font-poppins items-start font-bold ">
+                  <Image src="/images/logo_only.png" height="40" width="40" alt="this is our logo" priority />
+               
+                </div>
         
 
           {/* Hamburger for small screens */}

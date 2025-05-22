@@ -30,7 +30,7 @@ export default function ScriptGenerator({ locale }) {
     <div className="">
       <button
         onClick={generateScript}
-        className="bg-blue-600 text-white px-24 py-3 rounded-xl"
+        className="bg-gray-900 hover:bg-gray-700 text-white px-24 py-3 rounded-xl"
       >
             {t('GenerateScriptTag')}  
                 </button>

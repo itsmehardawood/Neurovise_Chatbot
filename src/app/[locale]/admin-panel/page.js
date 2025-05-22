@@ -25,7 +25,6 @@ export default function ServicesAdminPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editForm, setEditForm] = useState({
     serviceName: "",
-    price: "",
     description: "",
     working_hours: {},
   });
@@ -54,7 +53,7 @@ export default function ServicesAdminPage() {
         const token = localStorage.getItem("access_token");
 
         const response = await fetch(
-          "https://ecochatbot-production.up.railway.app/business-service",
+          "http://localhost:8000/business-service",
           {
             headers: {
               "Content-Type": "application/json",
@@ -94,7 +93,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
+        `http://localhost:8000/service/${serviceId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +110,6 @@ export default function ServicesAdminPage() {
       setSelectedService(data);
       setEditForm({
         serviceName: data.serviceName,
-        price: data.price,
         description: data.description,
         working_hours: data.working_hours || {},
       });
@@ -144,7 +142,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://ecochatbot-production.up.railway.app/service/${selectedService.id}`,
+        `http://localhost:8000/service/${selectedService.id}`,
         {
           method: "PUT",
           headers: {
@@ -180,7 +178,7 @@ export default function ServicesAdminPage() {
   const deleteService = async (serviceId) => {
     try {
       const res = await fetch(
-        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
+        `http://localhost:8000/service/${serviceId}`,
         {
           method: "DELETE",
         }
@@ -218,7 +216,7 @@ export default function ServicesAdminPage() {
       const newStatus = !currentStatus;
 
       const response = await fetch(
-        `https://ecochatbot-production.up.railway.app/service/${serviceId}`,
+        `http://localhost:8000/service/${serviceId}`,
         {
           method: "PUT",
           headers: {
@@ -369,9 +367,7 @@ export default function ServicesAdminPage() {
                         {service.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </div>
-                    <span className="text-lg font-bold text-blue-600">
-                      ${service.price}
-                    </span>
+               
                   </div>
                   
                   {/* Description with expand button */}
@@ -503,20 +499,7 @@ export default function ServicesAdminPage() {
                         }
                       />
                     </div>
-                    <div>
-                      <label className="block font-medium">Price</label>
-                      <input
-                        type="number"
-                        className="border p-2 rounded w-full"
-                        value={editForm.price}
-                        onChange={(e) =>
-                          setEditForm((prev) => ({
-                            ...prev,
-                            price: parseFloat(e.target.value),
-                          }))
-                        }
-                      />
-                    </div>
+                 
                     <div>
                       <label className="block font-medium">Description</label>
                       <textarea
@@ -636,10 +619,7 @@ export default function ServicesAdminPage() {
                         {selectedService.serviceName}
                       </p>
                     </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900">Price</h3>
-                      <p>${Number(selectedService.price).toFixed(2)}</p>
-                    </div>
+                 
                     <div>
                       <h3 className="font-medium text-gray-900">Description</h3>
                       <p className="text-gray-700">

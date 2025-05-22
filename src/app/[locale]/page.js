@@ -61,12 +61,13 @@ export default function HomePage() {
       </div>
 
       {/* 📄 Main content */}
-      <div className="min-h-screen bg-gradient-to-tl from-slate-700 to-slate-900 text-white flex flex-col py-20 items-center gap-6 p-6 relative">
+
+      <div className=" bg-cyan-900 bg-gradient-to-tl  via-transparent  rtl:bg-gradient-to-br from-cyan-600 to-cyan-900  min-h-screen  text-white flex flex-col py-24 items-center gap-6 p-6 relative">
           <div>
           <Image
-          src="/images/logo.png"
-          height={150}
-          width={150}
+          src="/images/pic.png"
+          height={300}
+          width={250}
           alt="this is our logo"
           priority
         />
@@ -100,14 +101,14 @@ export default function HomePage() {
 
           <button
             onClick={() => router.push(`/${locale}/admin-panel`)}
-            className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
+            className="w-full px-3 py-3 rounded-2xl bg-gray-900 hover:bg-gray-700 transition duration-300 shadow-md"
           >
             {t("AdminPanel")}
           </button>
 
           <button
             onClick={() => router.push(`/${locale}/business-service`)}
-            className="w-full px-3 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 transition duration-300 shadow-md"
+            className="w-full px-3 py-3 rounded-2xl bg-gray-900 hover:bg-gray-700 transition duration-300 shadow-md"
           >
             {t("manageBusiness")}
           </button>

@@ -10,7 +10,7 @@ const en = {
   confirmPasswordPlaceholder: 'Confirm your password',
   signup: 'Sign up',
   alreadyHaveAccount: "Already have an account? ",
-  welcomeMessage: 'Welcome to the Echo bot best for your business Solutions.',
+  welcomeMessage: 'Welcome to Neurovise – Your AI-Powered Business Assistant.',
   login: 'Log in',
   noAccount: "Don't have an Account? ",
   serviceName: 'Service Name',

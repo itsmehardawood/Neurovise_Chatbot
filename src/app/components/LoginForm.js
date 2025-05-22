@@ -39,7 +39,7 @@ function LoginForm({ locale = 'he' }) {
       formBody.append('password', password);
       formBody.append('grant_type', 'password'); // ✅ optional, but standard
 
-      const response = await fetch('https://ecochatbot-production.up.railway.app/login', {
+      const response = await fetch('http://localhost:8000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -85,7 +85,7 @@ function LoginForm({ locale = 'he' }) {
   };
 
   return (
-    <div className={`pt-20 flex justify-center items-center h-full w-full text-black ${locale === 'he' ? 'rtl' : 'ltr'}`}>
+    <div className={`py-20 flex justify-center  w-full text-black ${locale === 'he' ? 'rtl' : 'ltr'}`}>
       <div className="bg-white p-8 rounded-lg w-full max-w-md">
         <h1 className="text-gray-900 text-2xl py-10 font-bold">{t('login')}</h1>
 

@@ -11,7 +11,7 @@ const he = {
   confirmPasswordPlaceholder: 'אמת את הסיסמה שלך',
   signup: 'הרשמה',
   alreadyHaveAccount: "כבר יש לך חשבון? ",
-  welcomeMessage: 'ברוך הבא ל-Echo בוט הטוב ביותר עבור פתרונות העסק שלך.',
+  welcomeMessage: 'ברוכים הבאים לניורווייז – העוזר העסקי שלכם מבוסס בינה מלאכותית',
   login: 'התחברות',
   noAccount: "אין לך חשבון? ",
   serviceName: 'שם השירות',

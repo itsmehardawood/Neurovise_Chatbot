@@ -11,7 +11,7 @@ export default function SystemPromptModal({ isOpen, onClose }) {
     try {
       const token = localStorage.getItem("access_token");
       const res = await axios.get(
-        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        'http://localhost:8000/system-prompt',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ export default function SystemPromptModal({ isOpen, onClose }) {
     try {
       setLoading(true);
       const response = await axios.put(
-        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        'http://localhost:8000/business-service/system-prompt',
         { system_prompt: systemPrompt },
         {
           headers: {
@@ -58,7 +58,7 @@ export default function SystemPromptModal({ isOpen, onClose }) {
       const token = localStorage.getItem('access_token');
 
       await axios.delete(
-        'https://ecochatbot-production.up.railway.app/business-service/system-prompt',
+        'http://localhost:8000/business-service/system-prompt',
         {
           headers: {
             Authorization: `Bearer ${token}`,
