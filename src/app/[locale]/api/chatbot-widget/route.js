@@ -3,7 +3,7 @@ export async function GET(request) {
   const userId = searchParams.get("userId") || "unknown";
   const locale = searchParams.get("locale") || "en";
 
-  const embedUrl = `https://echo-chatbot-eight.vercel.app/${locale}/chatbot-embed?userId=${userId}`;
+  const embedUrl = `https://neurovise-chatbot.vercel.app/${locale}/chatbot-embed?userId=${userId}`;
 
   const jsCode = `
     console.log("✅ Injecting chatbot for userId: ${userId}");

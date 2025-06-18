@@ -28,7 +28,7 @@ const ChatHistory = () => {
 
     const fetchChatSessions = async () => {
       try {
-        const res = await fetch(`http://13.60.235.13:8000/chat-sessions/${userId}`);
+        const res = await fetch(`https://13.60.235.13/chat-sessions/${userId}`);
         const data = await res.json();
         
         // Sort chat sessions in descending order (newest first)
