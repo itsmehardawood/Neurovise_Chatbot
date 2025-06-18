@@ -34,7 +34,7 @@ export default function SignUpForm({ locale }) {
     try {
       const formattedPhone = `${countryCode.replace('+', '')}${phoneNumber}`;
 
-      const response = await fetch('http://13.60.235.13:8000/signup', {
+      const response = await fetch('https://13.60.235.13:8000/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

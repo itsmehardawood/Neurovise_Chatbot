@@ -74,7 +74,7 @@ const ServiceManagement = () => {
 
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        "http://13.60.235.13:8000/business-service",
+        "https://13.60.235.13:8000/business-service",
         {
           method: "POST",
           headers: {
