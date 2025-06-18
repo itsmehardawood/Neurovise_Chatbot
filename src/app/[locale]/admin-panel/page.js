@@ -23,6 +23,7 @@ export default function ServicesAdminPage() {
   const [isLoading, setIsLoading] = useState(true); // Set initial loading state to true
   const [isLoadingService, setIsLoadingService] = useState(false); // Separate loading state for service details
   const [isEditMode, setIsEditMode] = useState(false);
+  const [showAllServices, setShowAllServices] = useState(false); // New state for show more functionality
   const [editForm, setEditForm] = useState({
     serviceName: "",
     description: "",
@@ -53,7 +54,7 @@ export default function ServicesAdminPage() {
         const token = localStorage.getItem("access_token");
 
         const response = await fetch(
-          "http://localhost:8000/business-service",
+          "http://13.60.235.13:8000/business-service",
           {
             headers: {
               "Content-Type": "application/json",
@@ -93,7 +94,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://localhost:8000/service/${serviceId}`,
+        `http://13.60.235.13:8000/service/${serviceId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -142,7 +143,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `http://localhost:8000/service/${selectedService.id}`,
+        `http://13.60.235.13:8000/service/${selectedService.id}`,
         {
           method: "PUT",
           headers: {
@@ -178,7 +179,7 @@ export default function ServicesAdminPage() {
   const deleteService = async (serviceId) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/service/${serviceId}`,
+        `http://13.60.235.13:8000/service/${serviceId}`,
         {
           method: "DELETE",
         }
@@ -216,7 +217,7 @@ export default function ServicesAdminPage() {
       const newStatus = !currentStatus;
 
       const response = await fetch(
-        `http://localhost:8000/service/${serviceId}`,
+        `http://13.60.235.13:8000/service/${serviceId}`,
         {
           method: "PUT",
           headers: {
@@ -326,20 +327,30 @@ export default function ServicesAdminPage() {
     }
   };
 
+  // Determine which services to display
+  const displayedServices = showAllServices ? services : services.slice(0, 5);
+  const hasMoreServices = services.length > 5;
+
   if (!isAuthChecked) {
     return null;
   }
 
   return (
-    <div className="p-8 space-y-12 text-black min-h-screen bg-gradient-to-br from-slate-800 to-slate-900">
-      <BackButton />
-      <h1 className="text-4xl underline w-full mx-auto flex justify-center font-bold text-amber-50 py-5 ">
-        Admin Panel
-      </h1>
+    <div className="p-8 space-y-12 text-black min-h-screen bg-cyan-900 bg-gradient-to-tl  via-transparent  rtl:bg-gradient-to-br from-cyan-600 to-cyan-900">
+      {/* <BackButton /> */}
+    <div className="max-w-3xl mx-auto p-1 bg-gradient-to-r from-blue-900 via-blue-500 to-blue-600 rounded-3xl shadow-2xl mt-8">
+   <div className="bg-[#0f172a] rounded-3xl p-8 text-center">
+    <h1 className="text-5xl font-extrabold bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 text-transparent bg-clip-text drop-shadow-lg animate-fade-in">
+      Admin Panel
+    </h1>
+  </div>
+</div>
+
+
 
       {/* SERVICES TABLE */}
       <section className="py-5">
-        <h1 className="text-4xl font-bold text-white mb-8 flex justify-center bg-blue-600 p-2 rounded-2xl">Services</h1>
+        <h1 className="text-4xl font-bold text-white mb-8 flex justify-center bg-slate-900 p-2 rounded-2xl">Services</h1>
 
         {isLoading ? (
           <div className="bg-white rounded-xl p-8 text-center shadow-sm">
@@ -350,105 +361,142 @@ export default function ServicesAdminPage() {
             <p className="text-gray-500">Please wait while we fetch your services</p>
           </div>
         ) : services.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-600 rounded-lg px-3 py-5">
-            {services.map((service, index) => (
-              <div 
-                key={index} 
-                className={`relative rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl ${service.isActive ? 'bg-white' : 'bg-gray-100'}`}
-              >
-                {/* Status Badge - Moved to be part of the header row */}
-                <div className="p-6 pb-0">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start space-x-2 max-w-[70%]">
-                      <h3 className="text-xl font-bold text-gray-800 truncate">
-                        {service.serviceName}
-                      </h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800'}`}>
-                        {service.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-               
-                  </div>
-                  
-                  {/* Description with expand button */}
-                  <div className="mt-4">
-                    <p className="text-gray-600 text-sm line-clamp-3">
-                      {service.description}
-                    </p>
-                    {service.description.length > 100 && (
-                      <button
-                        onClick={() => handleViewMore(service.description)}
-                        className="text-blue-500 text-sm mt-1 hover:underline"
-                      >
-                        Read more
-                      </button>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Working Hours */}
-                <div className="p-6 pt-4">
-                  <h4 className="text-sm font-semibold text-gray-500 mb-2">Working Hours</h4>
-                  <div className="space-y-2">
-                    {service.working_hours && Object.entries(service.working_hours).map(([day, hours]) => (
-                      <div key={day} className="flex justify-between text-sm">
-                        <span className="capitalize text-gray-700">{day}</span>
-                        {hours.active ? (
-                          <span className="text-gray-600">
-                            {hours.start} - {hours.end}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">Closed</span>
-                        )}
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-gray-700 rounded-lg px-3 py-5">
+              {displayedServices.map((service, index) => (
+                <div 
+                  key={index} 
+                  className={`relative rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl ${service.isActive ? 'bg-white' : 'bg-gray-100'}`}
+                >
+                  {/* Status Badge - Moved to be part of the header row */}
+                  <div className="p-6 pb-0">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-start space-x-2 max-w-[70%]">
+                        <h3 className="text-xl font-bold text-gray-800 truncate">
+                          {service.serviceName}
+                        </h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-800'}`}>
+                          {service.isActive ? 'Active' : 'Inactive'}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-between">
-                  <div className="flex space-x-3">
-                    {/* View Button */}
-                    <button
-                      onClick={() => fetchServiceDetails(service.id)}
-                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                      title="View details"
-                    >
-                      <IoEyeSharp className="h-5 w-5 text-blue-600" />
-                    </button>
+                 
+                    </div>
                     
-                    {/* Edit Button */}
-                    <button
-                      onClick={() => fetchServiceDetails(service.id, true)}
-                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                      title="Edit"
-                    >
-                      <FaEdit className="h-5 w-5 text-yellow-600" />
-                    </button>
-                    
-                    {/* Delete Button */}
-                    <button
-                      onClick={() => handleDeleteClick(service.id)}
-                      className="p-2 rounded-full hover:bg-gray-200 transition-colors"
-                      title="Delete"
-                    >
-                      <RiDeleteBinLine className="h-5 w-5 text-red-600" />
-                    </button>
+                    {/* Description with expand button */}
+                    <div className="mt-4">
+                      <p className="text-gray-600 text-sm line-clamp-3">
+                        {service.description}
+                      </p>
+                      {service.description.length > 100 && (
+                        <button
+                          onClick={() => handleViewMore(service.description)}
+                          className="text-blue-500 text-sm mt-1 hover:underline"
+                        >
+                          Read more
+                        </button>
+                      )}
+                    </div>
                   </div>
                   
-                  {/* Toggle Switch */}
-                  <button 
-                    onClick={() => handleToggleClick(service)}
-                    className="flex items-center"
-                  >
-                    <div className={`relative rounded-full w-12 h-6 transition-colors ${service.isActive ? 'bg-green-500' : 'bg-gray-300'}`}>
-                      <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${service.isActive ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                  {/* Working Hours */}
+                  <div className="p-6 pt-4">
+                    <h4 className="text-sm font-semibold text-gray-500 mb-2">Working Hours</h4>
+                    <div className="space-y-2">
+                      {service.working_hours && Object.entries(service.working_hours).map(([day, hours]) => (
+                        <div key={day} className="flex justify-between text-sm">
+                          <span className="capitalize text-gray-700">{day}</span>
+                          {hours.active ? (
+                            <span className="text-gray-600">
+                              {hours.start} - {hours.end}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">Closed</span>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  </button>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="border-t border-gray-200 p-4 bg-gray-50 flex justify-between">
+                    <div className="flex space-x-3">
+                      {/* View Button */}
+                      <button
+                        onClick={() => fetchServiceDetails(service.id)}
+                        className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                        title="View details"
+                      >
+                        <IoEyeSharp className="h-5 w-5 text-blue-600" />
+                      </button>
+                      
+                      {/* Edit Button */}
+                      <button
+                        onClick={() => fetchServiceDetails(service.id, true)}
+                        className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                        title="Edit"
+                      >
+                        <FaEdit className="h-5 w-5 text-yellow-600" />
+                      </button>
+                      
+                      {/* Delete Button */}
+                      <button
+                        onClick={() => handleDeleteClick(service.id)}
+                        className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                        title="Delete"
+                      >
+                        <RiDeleteBinLine className="h-5 w-5 text-red-600" />
+                      </button>
+                    </div>
+                    
+                    {/* Toggle Switch */}
+                    <button 
+                      onClick={() => handleToggleClick(service)}
+                      className="flex items-center"
+                    >
+                      <div className={`relative rounded-full w-12 h-6 transition-colors ${service.isActive ? 'bg-green-500' : 'bg-gray-300'}`}>
+                        <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${service.isActive ? 'translate-x-7' : 'translate-x-1'}`}></div>
+                      </div>
+                    </button>
+                  </div>
                 </div>
+              ))}
+              
+              {/* Show More Button Card */}
+              {hasMoreServices && !showAllServices && (
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl border-2 border-dashed border-gray-300">
+                  <div className="p-6 flex flex-col items-center justify-center h-full min-h-[300px]">
+                    <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <MdOutlineMiscellaneousServices className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-700 mb-2">
+                      {services.length - 5} More Services
+                    </h3>
+                    <p className="text-gray-500 text-center mb-4">
+                      Click to view all services
+                    </p>
+                    <button
+                      onClick={() => setShowAllServices(true)}
+                      className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors font-medium"
+                    >
+                      Show More
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {/* Show Less Button */}
+            {showAllServices && hasMoreServices && (
+              <div className="mt-6 text-center">
+                <button
+                  onClick={() => setShowAllServices(false)}
+                  className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors font-medium"
+                >
+                  Show Less
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <div className="bg-white rounded-xl p-8 text-center shadow-sm">
             <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -462,7 +510,7 @@ export default function ServicesAdminPage() {
 
       {/* CHAT HISTORY TABLE (static for now) */}
       <section>
-        <h2 className="text-4xl w-full mx-auto flex justify-center font-bold mb-6 bg-blue-600 p-2 rounded-2xl text-white">Chat History</h2>
+        <h2 className="text-4xl w-full mx-auto flex justify-center font-bold mb-6 bg-slate-900 p-2 rounded-2xl text-white">Chat History</h2>
         <ChatHistory />
       </section>
 

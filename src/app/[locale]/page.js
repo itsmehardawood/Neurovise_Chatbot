@@ -13,7 +13,6 @@ import SystemPromptButton from "../components/SystemPromptButton";
 export default function HomePage() {
   const router = useRouter();
   const [userId, setUserId] = useState('');
-
   const params = useParams();
   const locale = params?.locale || "he";
   const t = useTranslation(locale);
@@ -30,9 +29,8 @@ export default function HomePage() {
   }, [locale, router]);
 
   const decodeJWT = (token) => {
-    // Decodes the JWT and extracts the payload
-    const base64Url = token.split(".")[1]; // Get the payload part of the JWT
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Decode base64
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split("")
@@ -41,86 +39,73 @@ export default function HomePage() {
         })
         .join("")
     );
-
-    return JSON.parse(jsonPayload); // Return the decoded payload as an object
+    return JSON.parse(jsonPayload);
   };
-
- 
 
   if (loading) return <p>{t("loading")}</p>;
 
   return (
     <>
-      {/* 🔒 Floating logout button */}
-      <div className="">
-        {/* <LogoutButton />
-        <LanguageButton /> */}
+      <Navbar />
 
-        <Navbar/>
-
-      </div>
-
-      {/* 📄 Main content */}
-
-      <div className=" bg-cyan-900 bg-gradient-to-tl  via-transparent  rtl:bg-gradient-to-br from-cyan-600 to-cyan-900  min-h-screen  text-white flex flex-col py-24 items-center gap-6 p-6 relative">
-          <div>
-          <Image
-          src="/images/pic.png"
-          height={300}
-          width={250}
-          alt="this is our logo"
+      <div className="relative min-h-screen flex flex-col items-center justify-start py-24 px-6 text-white">
+        {/* Background image */}
+        <Image
+          src="/images/newimg.jpg"
+          alt="Tech background"
+          fill
+          className="object-cover opacity-20 z-0"
           priority
         />
+
+        {/* Overlay */}
+        <div className="absolute inset-0  bg-slate-900/85 z-10" />
+
+        {/* Main content */}
+        <div className="relative z-20 flex flex-col items-center gap-6 w-full max-w-xs">
+          <Image
+            src="/images/pic.png"
+            height={300}
+            width={350}
+            alt="this is our logo"
+            priority
+          />
+
+          {/* Floating button to toggle the chat widget */}
+          <div
+            onClick={() => setIsChatOpen(!isChatOpen)}
+            className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer z-50"
+          >
+            <span className="text-2xl">💬</span>
           </div>
 
-        {/* Floating button to toggle the chat widget */}
-        <div
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg cursor-pointer z-50"
-        >
-          <span className="text-2xl">💬</span>
-        </div>
+          {isChatOpen && (
+            <ChatbotWidget
+              locale={locale}
+              isOpen={isChatOpen}
+              onClose={() => setIsChatOpen(false)}
+            />
+          )}
 
-        {/* Conditionally render the chatbot widget */}
-        {isChatOpen && (
-          <ChatbotWidget
-            locale={locale}
-            isOpen={isChatOpen}
-            onClose={() => setIsChatOpen(false)}
-          />
-        )}
-
-        {/* WhatsApp floating button */}
-        <WhatsAppButton />
-
-        <h1 className="text-4xl font-bold mb-6 drop-shadow">{t("welcome")}</h1>
-
-        <div className="flex flex-col gap-4 w-full max-w-xs justify-center items-center">
-
-
+          <WhatsAppButton />
 
           <button
             onClick={() => router.push(`/${locale}/admin-panel`)}
-            className="w-full px-3 py-3 rounded-2xl bg-gray-900 hover:bg-gray-700 transition duration-300 shadow-md"
+            className="w-full py-2 px-6 text-lg font-semibold text-white bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 hover:from-slate-800 hover:to-blue-900 rounded-xl transition duration-300 shadow-md"
           >
             {t("AdminPanel")}
           </button>
 
           <button
             onClick={() => router.push(`/${locale}/business-service`)}
-            className="w-full px-3 py-3 rounded-2xl bg-gray-900 hover:bg-gray-700 transition duration-300 shadow-md"
+            className="w-full py-2 px-6 text-lg font-semibold text-white bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 hover:from-slate-800 hover:to-blue-900 rounded-xl transition duration-300 shadow-md"
           >
             {t("manageBusiness")}
           </button>
 
-          <SystemPromptButton locale={locale}/>
+          <SystemPromptButton locale={locale} />
 
-
-          {/* Button to generate script tag */}
-          <ScriptGenerator userId={userId} locale={locale}  />
-                    
-
-       
+          <ScriptGenerator userId={userId} locale={locale} />
         </div>
       </div>
     </>

@@ -55,7 +55,7 @@ const en = {
   emailPlaceholderLogin: 'Enter your email to login',
   passwordPlaceholderLogin: 'Enter your password to login',
   logout: "Logout",
-  ManageSystemPrompt: "Manage System Prompt",
+  ManageSystemPrompt: "Manage Prompt",
   rememberMe: "Remember Password",
 
   // New translations for ServiceManagement component
@@ -134,7 +134,7 @@ const en = {
   loading: 'Loading...',
   welcome: 'Welcome',
   goToChatbot: 'Go to Chatbot',
-  manageBusiness: 'Add Business Services',
+  manageBusiness: 'Add Services',
   AdminPanel: "Admin Panel",
 
 

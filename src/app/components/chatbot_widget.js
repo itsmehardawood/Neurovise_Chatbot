@@ -46,7 +46,7 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/chat", {
+      const res = await fetch("http://13.60.235.13:8000/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:8000/start-chat", {
+      const res = await fetch("http://13.60.235.13:8000/start-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

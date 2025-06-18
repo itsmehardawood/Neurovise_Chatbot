@@ -12,20 +12,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Echo Chatbot",
+  title: "Neurovise Chatbot",
   description: "By itsmehardawood @Neurovise",
+
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-transparent  m-0 p-0` }>
-        {/* Overlay Language Button */}
-      
-
-        {/* Main Page Content */}
+      <head>
+        <link rel="icon" href="/images/logo_only.png" />
+        <title>Neurovise Chatbot</title>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-transparent m-0 p-0`}>
         {children}
       </body>
     </html>
   );
 }
+

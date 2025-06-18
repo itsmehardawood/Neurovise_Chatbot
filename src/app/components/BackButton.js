@@ -8,7 +8,7 @@ const BackButton = () => {
   return (
     <button
       onClick={() => router.back()}
-      className="fixed top-4 left-4 z-50 px-4  rounded  text-white hover:bg-gray-700 transition "
+      className="fixed top-4 left-4 z-50 p-4  rounded  text-white hover:bg-gray-700 transition "
     >
       ← Back
     </button>

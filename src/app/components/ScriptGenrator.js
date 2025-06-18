@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslation } from '@/lib/translations';
+import { useTranslation } from "@/lib/translations";
 
 export default function ScriptGenerator({ locale }) {
   const [userId, setUserId] = useState("");
   const [scriptTag, setScriptTag] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [showScript, setShowScript] = useState(false); // Toggle state
 
   const t = useTranslation(locale);
 
@@ -21,29 +23,47 @@ export default function ScriptGenerator({ locale }) {
     }
   }, []);
 
-  const generateScript = () => {
-    const script = `<script src="https://echo-chatbot-eight.vercel.app/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
-    setScriptTag(script);
+  const toggleScript = () => {
+    if (!showScript) {
+      const script = `<script src="https://echo-chatbot-eight.vercel.app/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
+      setScriptTag(script);
+      setCopied(false);
+    }
+    setShowScript(!showScript);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(scriptTag);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="">
+    <div className="max-w-2xl mx-auto  rounded-3xl backdrop-blur-md ">
       <button
-        onClick={generateScript}
-        className="bg-gray-900 hover:bg-gray-700 text-white px-24 py-3 rounded-xl"
+        onClick={toggleScript}
+        className="w-full py-2 px-21 mb-6 text-lg font-semibold text-white bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 hover:from-slate-800 hover:to-blue-900 rounded-xl transition duration-300 shadow-md"
       >
-            {t('GenerateScriptTag')}  
-                </button>
+        {showScript ? t("Close") : t("GenerateScriptTag")}
+      </button>
 
-      {scriptTag && (
-        <div className="mt-4">
-          <p className="mb-2 font-semibold">Copy and paste this script:</p>
+      {showScript && scriptTag && (
+        <div className="space-y-4 animate-fade-in">
+          <p className="text-white font-medium">
+            {t("Copy and Paste")}:
+          </p>
           <textarea
             value={scriptTag}
             readOnly
-            rows={6}
-            className="w-full p-2 border rounded-lg text-sm"
+            rows={5}
+            className="w-full bg-gray-800 text-white text-sm p-3 rounded-lg border border-white/20 resize-none focus:outline-none"
           />
+          <button
+            onClick={copyToClipboard}
+            className="py-2 px-4 bg-white text-black rounded-lg hover:bg-gray-200 transition"
+          >
+            {copied ? t("Copied") : t("Copy")}
+          </button>
         </div>
       )}
     </div>
