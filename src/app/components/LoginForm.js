@@ -39,7 +39,7 @@ function LoginForm({ locale = 'he' }) {
       formBody.append('password', password);
       formBody.append('grant_type', 'password'); // ✅ optional, but standard
 
-      const response = await fetch('https://13.60.235.13/login', {
+      const response = await fetch('https://api.neurovisesolutions.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

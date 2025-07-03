@@ -74,7 +74,7 @@ const ServiceManagement = () => {
 
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        "https://13.60.235.13/business-service",
+        "https://api.neurovisesolutions.com/business-service",
         {
           method: "POST",
           headers: {

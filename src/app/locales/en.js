@@ -110,7 +110,7 @@ const en = {
   response: "Response",
   error: "Error",
   signupSuccess:"Registered new User successfully",
-  chatbotPageTitle: 'Chat with EchoBot',
+  chatbotPageTitle: 'Chat with Neurovise Chatbot',
 
   // Integrated into your existing chatbot object
   chatbot: {

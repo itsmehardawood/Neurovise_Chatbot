@@ -54,7 +54,7 @@ export default function ServicesAdminPage() {
         const token = localStorage.getItem("access_token");
 
         const response = await fetch(
-          "https://13.60.235.13/business-service",
+          "https://api.neurovisesolutions.com/business-service",
           {
             headers: {
               "Content-Type": "application/json",
@@ -94,7 +94,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://13.60.235.13/service/${serviceId}`,
+        `https://api.neurovisesolutions.com/service/${serviceId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export default function ServicesAdminPage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        `https://13.60.235.13/service/${selectedService.id}`,
+        `https://api.neurovisesolutions.com/service/${selectedService.id}`,
         {
           method: "PUT",
           headers: {
@@ -179,7 +179,7 @@ export default function ServicesAdminPage() {
   const deleteService = async (serviceId) => {
     try {
       const res = await fetch(
-        `https://13.60.235.13/service/${serviceId}`,
+        `https://api.neurovisesolutions.com/service/${serviceId}`,
         {
           method: "DELETE",
         }
@@ -217,7 +217,7 @@ export default function ServicesAdminPage() {
       const newStatus = !currentStatus;
 
       const response = await fetch(
-        `https://13.60.235.13/service/${serviceId}`,
+        `https://api.neurovisesolutions.com/service/${serviceId}`,
         {
           method: "PUT",
           headers: {

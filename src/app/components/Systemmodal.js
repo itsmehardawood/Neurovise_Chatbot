@@ -29,7 +29,7 @@ export default function SystemPromptModal({ isOpen, onClose }) {
   }, []);
 
   // Base API configuration
-  const API_BASE = 'https://13.60.235.13/business-service';
+  const API_BASE = 'https://api.neurovisesolutions.com/business-service';
   const getHeaders = useCallback((token) => ({
     'Authorization': `Bearer ${token}`,
     'Content-Type': 'application/json',
