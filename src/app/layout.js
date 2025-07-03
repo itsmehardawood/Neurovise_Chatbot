@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,16 +15,20 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Neurovise Chatbot",
   description: "By itsmehardawood @Neurovise",
+   icons: {
+    icon: "/images/logo_only.png", // relative to /public
+  },
 
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/images/logo_only.png" />
+      <Head>
+<link rel="shortcut icon" href="/images/logo_only.png" type="image/png" />
+<link rel="icon" href="/images/logo_only.png" type="image/png" />
         <title>Neurovise Chatbot</title>
-      </head>
+      </Head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased text-black bg-transparent m-0 p-0`}>
         {children}
       </body>
