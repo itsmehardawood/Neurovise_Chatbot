@@ -14,7 +14,7 @@ export default function HomePage() {
   const router = useRouter();
   const [userId, setUserId] = useState('');
   const params = useParams();
-  const locale = params?.locale || "he";
+  const locale = params?.locale || "ar";
   const t = useTranslation(locale);
   const [loading, setLoading] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -87,7 +87,7 @@ export default function HomePage() {
             />
           )}
 
-          <WhatsAppButton />
+          {/* <WhatsAppButton /> */}
 
           <button
             onClick={() => router.push(`/${locale}/admin-panel`)}

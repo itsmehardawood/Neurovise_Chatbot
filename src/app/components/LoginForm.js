@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/translations';
 
-function LoginForm({ locale = 'he' }) {
+function LoginForm({ locale = 'ar' }) {
   const t = useTranslation(locale);
   const router = useRouter();
 
@@ -85,7 +85,7 @@ function LoginForm({ locale = 'he' }) {
   };
 
   return (
-    <div className={`py-20 flex justify-center  w-full text-black ${locale === 'he' ? 'rtl' : 'ltr'}`}>
+    <div className={`py-20 flex justify-center  w-full text-black ${locale === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="bg-white p-8 rounded-lg w-full max-w-md">
         <h1 className="text-gray-900 text-2xl py-10 font-bold">{t('login')}</h1>
 

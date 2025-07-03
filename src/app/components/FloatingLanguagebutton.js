@@ -37,7 +37,7 @@ const FloatingLanguageButton = () => {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
       >
-        {locale === 'en' ? 'English' : 'עברית'}
+        {locale === 'en' ? 'English' : 'Arabic'}
         <ChevronDown size={16} />
       </button>
 
@@ -50,10 +50,10 @@ const FloatingLanguageButton = () => {
             English
           </button>
           <button
-            onClick={() => switchLanguage('he')}
+            onClick={() => switchLanguage('ar')}
             className="block w-full px-4 py-2 text-left hover:bg-slate-600 text-white"
           >
-            עברית
+            Arabic
           </button>
         </div>
       )}

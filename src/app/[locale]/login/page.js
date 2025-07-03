@@ -16,7 +16,7 @@ const PoppinsFont = Poppins({
 
 export default function Page() {
   const { locale } = useParams()  // gets the locale from the dynamic route
-  const t = useTranslation(locale || 'he')
+  const t = useTranslation(locale || 'ar')
 
   return (
     <div className={`${PoppinsFont.variable} w-full min-h-screen grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2`}>
