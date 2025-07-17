@@ -93,7 +93,7 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://api.neurovisesolutions.com/start-chat", {
+      const res = await fetch("https://api.neurovisesolutions.com/chat/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
