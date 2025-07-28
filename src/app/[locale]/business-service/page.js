@@ -15,7 +15,7 @@ const PoppinsFont = Poppins({
 const ServiceManagement = () => {
   const router = useRouter();
   const { locale } = useParams();
-  const t = useTranslation(locale || "he");
+  const t = useTranslation(locale || "ar");
 
   // Service Management State
   const [isAuthChecked, setIsAuthChecked] = useState(false);
