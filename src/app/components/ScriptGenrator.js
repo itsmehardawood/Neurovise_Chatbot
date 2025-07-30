@@ -25,7 +25,7 @@ export default function ScriptGenerator({ locale }) {
 
   const toggleScript = () => {
     if (!showScript) {
-      const script = `<script src="https://neurovise-chatbot.vercel.app/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
+      const script = `<script src="https://chatbot.neurovisesolutions.com/${locale}/api/chatbot-widget?userId=${userId}" async></script>`;
       setScriptTag(script);
       setCopied(false);
     }
