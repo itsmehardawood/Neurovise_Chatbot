@@ -28,7 +28,7 @@ const ChatHistory = () => {
 
     const fetchChatSessions = async () => {
       try {
-        const res = await fetch(`https://api.neurovisesolutions.com/chat-sessions/${userId}`);
+        const res = await fetch(`https://api.neurovisesolutions.com/chat/sessions/${userId}`);
         const data = await res.json();
         
         // Sort chat sessions in descending order (newest first)

@@ -48,7 +48,7 @@ function LoginForm({ locale = 'ar' }) {
       });
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
