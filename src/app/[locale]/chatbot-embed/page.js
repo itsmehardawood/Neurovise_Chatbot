@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 export default function ChatbotEmbedPage() {
   const searchParams = useSearchParams();
   const [userId, setUserId] = useState(null);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ export default function ChatbotEmbedPage() {
 
   useEffect(() => {
     setMounted(true);
+    console.log("ChatbotEmbedPage mounted, isOpen:", false);
   }, []);
 
   // Ensure the component doesn't render until it's mounted to avoid hydration mismatch
@@ -28,21 +29,15 @@ export default function ChatbotEmbedPage() {
   if (!userId) return null;
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-transparent m-0 p-0">
+    <>
+      {console.log("Rendering ChatbotWidget with isOpen:", isOpen)}
       <ChatbotWidget 
         isOpen={isOpen}
         onClose={() => setIsOpen(false)} // Handle closing the widget
+        onOpen={() => setIsOpen(true)} // Handle opening the widget
         propUserId={userId}
         locale="en"
       />
-      {!isOpen && (
-        <button 
-          onClick={() => setIsOpen(true)} // Button to reopen the widget
-          className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full"
-        >
-          Open Chat
-        </button>
-      )}
-    </div>
+    </>
   );
 }

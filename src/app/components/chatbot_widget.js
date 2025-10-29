@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@/lib/translations";
 
-export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
+export default function ChatbotWidget({ locale, isOpen, onClose, propUserId, onOpen }) {
   const [sessionId, setSessionId] = useState(""); // New state for session ID
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -13,6 +13,8 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showPreChatForm, setShowPreChatForm] = useState(true);
   const [userId, setUserId] = useState(propUserId || "");
+
+  console.log("ChatbotWidget rendered with isOpen:", isOpen);
   
   // UseEffect to set userId from localStorage token if propUserId is not passed
   useEffect(() => {
@@ -118,11 +120,12 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 text-black" id="chatbot-widget-container">
-      {isOpen && (
-        <div className="relative mb-2 mr-4">
-          <div className="flex flex-col h-[500px] max-w-full w-full sm:max-w-xl bg-white shadow-md rounded-2xl overflow-hidden">
-            <div className="p-4 bg-blue-600 text-white relative">
+    <>
+      {isOpen ? (
+        <div className="fixed bottom-4 right-4 z-50 text-black" id="chatbot-widget-container">
+          <div className="relative mb-2 mr-4">
+            <div className="flex flex-col h-[500px] max-w-full w-full sm:max-w-xl bg-white shadow-md rounded-2xl overflow-hidden">
+              <div className="p-4 bg-blue-600 text-white relative">
               <h1 className="text-xl font-bold">{t("chatbotTitle")}</h1>
 
               {/* Close button */}
@@ -244,19 +247,22 @@ export default function ChatbotWidget({ locale, isOpen, onClose, propUserId }) {
                 </form>
               </>
             )}
+            </div>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Floating Button */}
       {!isOpen && (
-        <div
-          onClick={() => onClose()}
-          className="bg-blue-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors"
-        >
-          <span className="text-2xl hover:bg-blue-600">💬</span>
+        <div className="fixed bottom-4 right-4 z-50">
+          <div
+            onClick={() => onOpen && onOpen()}
+            className="bg-blue-600 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg cursor-pointer hover:bg-blue-700 transition-colors"
+          >
+            <span className="text-2xl">💬</span>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

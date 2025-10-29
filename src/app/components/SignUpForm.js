@@ -34,7 +34,7 @@ export default function SignUpForm({ locale }) {
     try {
       const formattedPhone = `${countryCode.replace('+', '')}${phoneNumber}`;
 
-      const response = await fetch('https://api.neurovisesolutions.com/signup', {
+      const response = await fetch('https://api.neurovisesolutions.com/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
